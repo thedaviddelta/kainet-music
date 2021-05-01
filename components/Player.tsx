@@ -1,9 +1,9 @@
 import { FC, SyntheticEvent, useEffect, useReducer, useRef } from "react";
 import { Button, HStack, Image, Slider, SliderFilledTrack, SliderThumb, SliderTrack } from "@chakra-ui/react";
-import { useQueue } from "../contexts/queue";
-import reducer, {ActionType, initialState} from "../reducers/player";
+import { useQueue } from "@contexts/queue";
+import reducer, { ActionType, initialState } from "@reducers/player";
 
-const Player: FC = () => {
+const Player: FC = (props) => {
     const { currentSong } = useQueue();
     const [state, dispatch] = useReducer(reducer, initialState);
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -40,11 +40,11 @@ const Player: FC = () => {
     }, [state.volume]);
 
     return (
-        <HStack>
+        <HStack {...props}>
             <Image
                 borderRadius="full"
                 boxSize="150px"
-                src={(currentSong && currentSong.thumbnail[currentSong.thumbnail.length - 1]) ?? ""}
+                src={(currentSong?.thumbnails?.[currentSong.thumbnails.length - 1]) ?? ""}
                 alt={currentSong?.title ?? ""}
             />
             <Button onClick={() => dispatch({ type: state.isPlaying ? ActionType.PAUSE : ActionType.PLAY })}>
@@ -80,6 +80,8 @@ const Player: FC = () => {
             <audio
                 ref={audioRef}
                 src={state.sourceUrl}
+                onPlay={() => dispatch({ type: ActionType.PLAY })}
+                onPause={() => dispatch({ type: ActionType.PAUSE })}
                 onTimeUpdate={(e: SyntheticEvent<HTMLAudioElement> & { target: HTMLAudioElement }) => (
                     dispatch({ type: ActionType.SET_FIELD, payload: { key: "currentTime", value: e.target.currentTime } }
                 ))}

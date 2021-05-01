@@ -2738,10 +2738,10 @@ json5@^1.0.1:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-kainet-scraper@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/kainet-scraper/-/kainet-scraper-1.0.0.tgz#5ebd051728ef5077ac81c7e171038cfdb2c54771"
-  integrity sha512-hjiwNgLhHALvVVING+Qw9pts+CE6zqmBlc90wGIFgZ0CZq+nn9yZyqmEgUymE3qfuhuJSUAgku+jPgiw3+Q7Qg==
+kainet-scraper@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/kainet-scraper/-/kainet-scraper-1.1.1.tgz#a7accc8d062ba08195ed5895a5cc9e2d979dde3a"
+  integrity sha512-JpzD1g8xNVK2F774Cj4QRfpVGxt75U0s9HqhcHBWJI4NuL630BfCrrYWziqzlAgxnXmkW4i4jOhG2n3A9Wn72g==
   dependencies:
     axios "^0.21.1"
     axios-retry "^3.1.9"
