@@ -1,17 +1,17 @@
 type State = {
-    isPlaying: boolean,
+    playback: "playing" | "paused" | "none",
     duration: number,
     currentTime: number,
-    userTime: number,
+    timeUpdated: boolean,
     sourceUrl: string,
     volume: number
 };
 
 export const initialState: State = {
-    isPlaying: false,
+    playback: "none",
     duration: 0,
     currentTime: 0,
-    userTime: 0,
+    timeUpdated: false,
     sourceUrl: "",
     volume: 100
 };
@@ -21,7 +21,8 @@ export enum ActionType {
     PLAY,
     PAUSE,
     SETUP,
-    CLEAR
+    STOP,
+    TIME_UPDATE
 }
 
 type Action = {
@@ -41,23 +42,32 @@ type Action = {
         sourceUrl: string
     }
 } | {
-    type: ActionType.CLEAR
+    type: ActionType.STOP
+} | {
+    type: ActionType.TIME_UPDATE,
+    payload: {
+        time: number,
+        manual?: boolean
+    }
 };
 
-export default function reducer(state: State, action: Action) {
+export default function reducer(state: State, action: Action): State {
     switch (action.type) {
         case ActionType.SET_FIELD:
             const { key, value } = action.payload;
             return { ...state, [key]: value };
         case ActionType.PLAY:
-            return { ...state, isPlaying: true };
+            return { ...state, playback: "playing" };
         case ActionType.PAUSE:
-            return { ...state, isPlaying: false };
+            return { ...state, playback: "paused" };
         case ActionType.SETUP:
             const { sourceUrl, duration } = action.payload;
-            return { ...state, sourceUrl, duration, currentTime: 0, userTime: 0, isPlaying: true };
-        case ActionType.CLEAR:
-            return { ...state, sourceUrl: "", duration: 0, currentTime: 0, userTime: 0, isPlaying: true };
+            return { ...state, sourceUrl, duration, currentTime: 0, playback: "playing" };
+        case ActionType.STOP:
+            return { ...state, sourceUrl: "", duration: 0, currentTime: 0, playback: "none" };
+        case ActionType.TIME_UPDATE:
+            const { time, manual } = action.payload;
+            return { ...state, currentTime: time, timeUpdated: manual || state.timeUpdated };
         default:
             return state;
     }

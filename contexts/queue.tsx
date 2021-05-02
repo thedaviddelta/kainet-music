@@ -23,10 +23,10 @@ export const useQueue = () => {
         queue,
         currentSong: queue[current],
         canPrev: current > 0,
-        setQueue(queue: (YtMusicSong | YtMusicVideo)[]) {
+        setQueue(queue: (YtMusicSong & YtMusicVideo)[]) {
             dispatch({ type: ActionType.SET, payload: { queue } });
         },
-        addSong(song: YtMusicSong | YtMusicVideo) {
+        addSong(song: YtMusicSong & YtMusicVideo) {
             dispatch({ type: ActionType.ADD, payload: { song } });
         },
         prevSong() {

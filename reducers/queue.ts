@@ -1,7 +1,7 @@
 import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
 
 type State = {
-    queue: (YtMusicSong | YtMusicVideo)[],
+    queue: (YtMusicSong & YtMusicVideo)[],
     current: number
 };
 
@@ -20,7 +20,7 @@ export enum ActionType {
 export type Action = {
     type: ActionType.SET,
     payload: {
-        queue: (YtMusicSong | YtMusicVideo)[]
+        queue: (YtMusicSong & YtMusicVideo)[]
     }
 } | {
     type: ActionType.ADD,
