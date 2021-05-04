@@ -2,7 +2,11 @@ import { FC } from "react";
 import { HStack } from "@chakra-ui/react";
 import { SearchBar } from ".";
 
-const Header: FC = (props) => (
+type Props = {
+    [key: string]: any
+};
+
+const Header: FC<Props> = (props) => (
     <HStack {...props}>
         <SearchBar />
     </HStack>

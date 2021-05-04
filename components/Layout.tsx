@@ -1,17 +1,28 @@
 import { FC } from "react";
 import Head from "next/head";
-import { VStack } from "@chakra-ui/react";
+import { Flex, VStack } from "@chakra-ui/react";
 import { Header, Player } from ".";
 
-const Layout: FC = ({ children, ...props }) => (
+type Props = {
+    [key: string]: any
+};
+
+const Layout: FC<Props> = ({ children, ...props }) => (
     <VStack minH="100vh" {...props}>
         <Head>
             <title>Kainet Music</title>
             <link rel="icon" href="/favicon.svg" />
         </Head>
+
         <Header />
-        {children}
-        <Player />
+        <Flex flexGrow={1}>
+            {children}
+        </Flex>
+        <Player
+            position="sticky"
+            left={0}
+            bottom={0}
+        />
     </VStack>
 );
 

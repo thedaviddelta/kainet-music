@@ -3,7 +3,11 @@ import { useRouter } from "next/router";
 import { HStack, Input, Button, Select } from "@chakra-ui/react";
 import { SearchType, SearchTypes } from "kainet-scraper";
 
-const SearchBar: FC = (props) => {
+type Props = {
+    [key: string]: any
+};
+
+const SearchBar: FC<Props> = (props) => {
     const [query, setQuery] = useState("");
     const [type, setType] = useState<SearchTypes>(SearchType.SONGS);
 
