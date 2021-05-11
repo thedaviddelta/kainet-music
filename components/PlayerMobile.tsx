@@ -29,6 +29,7 @@ import {
     RiArrowDropUpLine
 } from "react-icons/ri";
 import { FaPause, FaPlay, FaStepBackward, FaStepForward } from "react-icons/fa";
+import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
 
 type Props = {
     imgSrc: string,
@@ -36,8 +37,14 @@ type Props = {
     artist: string,
     canPrev: boolean,
     timeToText: (secs: number) => string,
+    remainingQueue: (YtMusicSong & YtMusicVideo)[],
     prev: () => void,
     next: () => void,
+    goTo: (song: YtMusicSong | YtMusicVideo) => void,
+    isShuffle: boolean,
+    toggleShuffle: () => void,
+    repeatType: "none" | "all" | "one",
+    toggleRepeat: () => void,
     currentTime: number,
     duration: number,
     volume: number,
@@ -56,8 +63,14 @@ const PlayerMobile: FC<Props> = ({
     artist,
     canPrev,
     timeToText,
+    remainingQueue,
     prev,
     next,
+    goTo,
+    isShuffle,
+    toggleShuffle,
+    repeatType,
+    toggleRepeat,
     currentTime,
     duration,
     volume,

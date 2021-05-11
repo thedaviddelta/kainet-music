@@ -10,6 +10,13 @@ import {
     SliderFilledTrack,
     SliderThumb,
     SliderTrack,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverArrow,
+    PopoverCloseButton,
     BackgroundProps
 } from "@chakra-ui/react";
 import {
@@ -21,6 +28,7 @@ import {
     RiPlayListFill
 } from "react-icons/ri";
 import { FaPlay, FaPause, FaStepBackward, FaStepForward } from "react-icons/fa";
+import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
 
 type Props = {
     imgSrc: string,
@@ -28,8 +36,14 @@ type Props = {
     artist: string,
     canPrev: boolean,
     timeToText: (secs: number) => string,
+    remainingQueue: (YtMusicSong & YtMusicVideo)[],
     prev: () => void,
     next: () => void,
+    goTo: (song: YtMusicSong | YtMusicVideo) => void,
+    isShuffle: boolean,
+    toggleShuffle: () => void,
+    repeatType: "none" | "all" | "one",
+    toggleRepeat: () => void,
     currentTime: number,
     duration: number,
     volume: number,
@@ -48,8 +62,14 @@ const PlayerDesktop: FC<Props> = ({
     artist,
     canPrev,
     timeToText,
+    remainingQueue,
     prev,
     next,
+    goTo,
+    isShuffle,
+    toggleShuffle,
+    repeatType,
+    toggleRepeat,
     currentTime,
     duration,
     volume,
@@ -91,6 +111,8 @@ const PlayerDesktop: FC<Props> = ({
                 <IconButton
                     aria-label="Shuffle"
                     icon={<RiShuffleLine />}
+                    onClick={toggleShuffle}
+                    colorScheme={isShuffle ? "kaihong" : "gray"}
                 />
                 <ButtonGroup variant="ghost" size="md" isDisabled={isPlaybackEmpty}>
                     <IconButton
@@ -113,7 +135,9 @@ const PlayerDesktop: FC<Props> = ({
                 </ButtonGroup>
                 <IconButton
                     aria-label="Repeat"
-                    icon={<RiRepeat2Line />}
+                    icon={repeatType === "one" ? <RiRepeatOneLine /> : <RiRepeat2Line />}
+                    onClick={toggleRepeat}
+                    colorScheme={repeatType !== "none" ? "kaihong" : "gray"}
                 />
             </ButtonGroup>
             <HStack>
@@ -137,12 +161,38 @@ const PlayerDesktop: FC<Props> = ({
         </VStack>
 
         <HStack flex={1} justify="flex-end">
-            <IconButton
-                aria-label="Queue"
-                icon={<RiPlayListFill />}
-                variant="ghost"
-                size="lg"
-            />
+            <Popover
+                closeOnBlur={false}
+                placement="top"
+            >
+                {({ isOpen }) => (
+                    <>
+                        <PopoverTrigger>
+                            <IconButton
+                                aria-label="Queue"
+                                icon={<RiPlayListFill />}
+                                colorScheme={isOpen ? "kaihong" : "gray"}
+                                variant="ghost"
+                                size="lg"
+                            />
+                        </PopoverTrigger>
+                            <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>Queue</PopoverHeader>
+                            <PopoverBody maxH="75vh" overflow="auto">
+                                {remainingQueue.map(song => (
+                                    <>
+                                        <IconButton aria-label={song.title} onClick={() => goTo(song)} />
+                                        <Text>{song.title}</Text>
+                                    </>
+                                ))}
+                            </PopoverBody>
+                        </PopoverContent>
+                    </>
+                )}
+            </Popover>
+
             <Slider
                 aria-label="Volume"
                 colorScheme="gray"

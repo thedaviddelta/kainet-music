@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Player: FC<Props> = (props) => {
-    const { currentSong, canPrev, prevSong, nextSong } = useQueue();
+    const { remainingQueue, currentSong, canPrev, prevSong, nextSong, isShuffle, toggleShuffle, repeatType, toggleRepeat, goTo } = useQueue();
     const [state, dispatch] = useReducer(reducer, initialState);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -24,12 +24,6 @@ const Player: FC<Props> = (props) => {
             .join(":");
     }, []);
 
-    const prev = useCallback(() => {
-        if (canPrev && state.currentTime <= 5)
-            return prevSong();
-        dispatch({ type: ActionType.TIME_UPDATE, payload: { time: 0, manual: true } });
-    }, [canPrev, prevSong, state.currentTime]);
-
     const togglePlay = useCallback(() => (
         dispatch({ type: state.playback === "playing" ? ActionType.PAUSE : ActionType.PLAY })
     ), [state.playback]);
@@ -41,6 +35,17 @@ const Player: FC<Props> = (props) => {
     const setVolume = useCallback((value: number) => (
         dispatch({ type: ActionType.SET_FIELD, payload: { key: "volume", value } })
     ), []);
+
+    const prev = useCallback(() => {
+        if (canPrev && state.currentTime <= 5)
+            prevSong();
+        setCurrentTime(0, true);
+    }, [canPrev, prevSong, state.currentTime, setCurrentTime]);
+
+    const next = useCallback(() => {
+        nextSong();
+        setCurrentTime(0, true);
+    }, [nextSong, setCurrentTime]);
 
     useEffect(() => {
         if (!currentSong)
@@ -116,9 +121,15 @@ const Player: FC<Props> = (props) => {
                 title={currentSong?.title ?? "No song"}
                 artist={currentSong?.artist ?? "Unknown"}
                 timeToText={timeToText}
+                remainingQueue={remainingQueue}
                 canPrev={canPrev}
                 prev={prev}
-                next={nextSong}
+                next={next}
+                goTo={goTo}
+                isShuffle={isShuffle}
+                toggleShuffle={toggleShuffle}
+                repeatType={repeatType}
+                toggleRepeat={toggleRepeat}
                 currentTime={state.currentTime}
                 duration={state.duration}
                 volume={state.volume}
@@ -135,7 +146,8 @@ const Player: FC<Props> = (props) => {
                 src={state.sourceUrl}
                 onPlay={() => dispatch({ type: ActionType.PLAY })}
                 onPause={() => dispatch({ type: ActionType.PAUSE })}
-                onEnded={nextSong}
+                onEnded={next}
+                loop={repeatType === "one"}
                 onTimeUpdate={(e: SyntheticEvent<HTMLAudioElement> & { target: HTMLAudioElement }) => (
                     setCurrentTime(e.target.currentTime)
                 )}

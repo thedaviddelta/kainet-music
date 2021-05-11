@@ -1,6 +1,6 @@
 import { createContext, Dispatch, FC, useContext, useReducer } from "react";
 import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
-import reducer, { Action, ActionType, initialState } from "../reducers/queue";
+import reducer, { Action, ActionType, initialState, RepeatType } from "@reducers/queue";
 
 const QueueContext = createContext<[
     typeof initialState,
@@ -18,11 +18,13 @@ export const QueueProvider: FC = ({ children }) => (
 
 export const useQueue = () => {
     const [state, dispatch] = useContext(QueueContext);
-    const { queue, current } = state;
+    const { mainQueue, sortedQueue, current, shuffle, repeat } = state;
     return {
-        queue,
-        currentSong: queue[current],
-        canPrev: current > 0,
+        remainingQueue: [...mainQueue.slice(current + 1), ...sortedQueue],
+        currentSong: mainQueue[current],
+        canPrev: repeat !== RepeatType.NONE || current > 0,
+        isShuffle: shuffle,
+        repeatType: RepeatType[repeat].toLocaleLowerCase() as Lowercase<keyof typeof RepeatType>,
         setQueue(queue: (YtMusicSong & YtMusicVideo)[]) {
             dispatch({ type: ActionType.SET, payload: { queue } });
         },
@@ -34,6 +36,15 @@ export const useQueue = () => {
         },
         nextSong() {
             dispatch({ type: ActionType.NEXT });
+        },
+        toggleShuffle() {
+            dispatch({ type: ActionType.TOGGLE_SHUFFLE });
+        },
+        toggleRepeat() {
+            dispatch({ type: ActionType.TOGGLE_REPEAT });
+        },
+        goTo(song: YtMusicSong | YtMusicVideo) {
+            dispatch({ type: ActionType.GOTO, payload: { song } });
         }
     };
 };
