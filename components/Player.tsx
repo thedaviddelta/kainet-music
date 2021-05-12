@@ -1,8 +1,8 @@
 import { FC, SyntheticEvent, useEffect, useReducer, useRef, useCallback } from "react";
-import { useBreakpointValue } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
-import { PlayerDesktop, PlayerMobile } from ".";
+import { PlayerBar, SongInfo, SongProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
 
 type Props = {
     [key: string]: any
@@ -12,17 +12,6 @@ const Player: FC<Props> = (props) => {
     const { remainingQueue, currentSong, canPrev, prevSong, nextSong, isShuffle, toggleShuffle, repeatType, toggleRepeat, goTo } = useQueue();
     const [state, dispatch] = useReducer(reducer, initialState);
     const audioRef = useRef<HTMLAudioElement | null>(null);
-
-    const timeToText = useCallback((secs: number = 0) => {
-        const hours = Math.floor(secs / 3600);
-        const hoursRest = Math.floor(secs % 3600);
-        const mins = Math.floor(hoursRest / 60);
-        const minsRest = Math.floor(hoursRest % 60);
-        return [hours || -1, mins, minsRest]
-            .filter(el => el >= 0)
-            .map(el => el.toString().padStart(3 - el.toString().length, "0"))
-            .join(":");
-    }, []);
 
     const togglePlay = useCallback(() => (
         dispatch({ type: state.playback === "playing" ? ActionType.PAUSE : ActionType.PLAY })
@@ -108,39 +97,70 @@ const Player: FC<Props> = (props) => {
         navigator.mediaSession.setActionHandler("pause", () => dispatch({ type: ActionType.PAUSE }));
         navigator.mediaSession.setActionHandler("stop", () => dispatch({ type: ActionType.STOP }));
         navigator.mediaSession.setActionHandler("previoustrack", prev);
-        navigator.mediaSession.setActionHandler("nexttrack", nextSong);
+        navigator.mediaSession.setActionHandler("nexttrack", next);
         navigator.mediaSession.setActionHandler("seekto", details => setCurrentTime(details.seekTime, true));
-    }, [prev, nextSong, setCurrentTime]);
-
-    const PlayerBar = useBreakpointValue([PlayerMobile, null, PlayerDesktop]) ?? PlayerDesktop;
+    }, [prev, next, setCurrentTime]);
 
     return (
         <>
             <PlayerBar
-                imgSrc={currentSong?.thumbnails?.[currentSong.thumbnails.length - 1] ?? ""}
-                title={currentSong?.title ?? "No song"}
-                artist={currentSong?.artist ?? "Unknown"}
-                timeToText={timeToText}
-                remainingQueue={remainingQueue}
-                canPrev={canPrev}
-                prev={prev}
-                next={next}
-                goTo={goTo}
-                isShuffle={isShuffle}
-                toggleShuffle={toggleShuffle}
-                repeatType={repeatType}
-                toggleRepeat={toggleRepeat}
-                currentTime={state.currentTime}
-                duration={state.duration}
-                volume={state.volume}
-                isPlaybackEmpty={state.playback === "none"}
-                isPlaying={state.playback === "playing"}
-                togglePlay={togglePlay}
-                setCurrentTime={setCurrentTime}
-                setVolume={setVolume}
+                songInfo={(props) => (
+                    <SongInfo
+                        title={currentSong?.title ?? "No song"}
+                        artist={currentSong?.artist ?? "Unknown"}
+                        {...props}
+                    />
+                )}
+                songThumbnail={(props) => (
+                    <Image
+                        src={currentSong?.thumbnails?.[currentSong.thumbnails.length - 1] ?? ""}
+                        fallbackSrc="/fallback.svg"
+                        alt={currentSong?.title ?? "No song"}
+                        {...props}
+                    />
+                )}
+                songProgress={(props) => (
+                    <SongProgress
+                        currentTime={state.currentTime}
+                        duration={state.duration}
+                        setCurrentTime={setCurrentTime}
+                        {...props}
+                    />
+                )}
+                playbackButtons={(props) => (
+                    <PlaybackButtons
+                        isPlaybackEmpty={state.playback === "none"}
+                        isPlaying={state.playback === "playing"}
+                        togglePlay={togglePlay}
+                        canPrev={canPrev || state.currentTime > 5}
+                        prev={prev}
+                        next={next}
+                        isShuffle={isShuffle}
+                        toggleShuffle={toggleShuffle}
+                        isNotRepeating={repeatType !== "none"}
+                        isRepeatingOne={repeatType === "one"}
+                        toggleRepeat={toggleRepeat}
+                        {...props}
+                    />
+                )}
+                queuePopover={(props) => (
+                    <QueuePopover
+                        remainingQueue={remainingQueue}
+                        goTo={goTo}
+                        {...props}
+                    />
+                )}
+                volumeControl={(props) => (
+                    <VolumeControl
+                        volume={state.volume}
+                        setVolume={setVolume}
+                        {...props}
+                    />
+                )}
                 bg="gray.900"
                 {...props}
             />
+
             <audio
                 ref={audioRef}
                 src={state.sourceUrl}
