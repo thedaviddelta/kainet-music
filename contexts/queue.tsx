@@ -45,7 +45,7 @@ export const useQueue = () => {
     return {
         remainingQueue: [...mainQueue.slice(current + 1), ...sortedQueue],
         currentSong: mainQueue[current],
-        canPrev: (repeat !== RepeatType.NONE || current > 0) && (mainQueue.length > 1 || sortedQueue.length > 1),
+        canPrev: (repeat !== RepeatType.NONE || current > 0) && (mainQueue.length > 0 || sortedQueue.length > 0),
         isShuffle: shuffle,
         repeatType: RepeatType[repeat].toLocaleLowerCase() as Lowercase<keyof typeof RepeatType>,
         setQueue(queue: (YtMusicSong & YtMusicVideo)[]) {

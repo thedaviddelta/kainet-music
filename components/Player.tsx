@@ -1,5 +1,5 @@
 import { FC, SyntheticEvent, useEffect, useReducer, useRef, useCallback } from "react";
-import { Image } from "@chakra-ui/react";
+import { Image, useToast } from "@chakra-ui/react";
 import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
 import { PlayerBar, SongInfo, SongProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
@@ -22,6 +22,7 @@ const Player: FC<Props> = (props) => {
     const { remainingQueue, currentSong, canPrev, prevSong, nextSong, isShuffle, toggleShuffle, repeatType, toggleRepeat, goTo } = useQueue();
     const [state, dispatch] = useReducer(reducer, initialState, initLocalStorage);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const toast = useToast();
 
     const togglePlay = useCallback(() => (
         dispatch({ type: state.playback === "playing" ? ActionType.PAUSE : ActionType.PLAY })
@@ -51,15 +52,31 @@ const Player: FC<Props> = (props) => {
             return dispatch({ type: ActionType.STOP });
 
         dispatch({ type: ActionType.PAUSE });
-        fetch(`/api/source?id=${currentSong.id}`)
-            .then(res => res.json())
-            .then(json => {
-                const { url, duration } = json;
-                dispatch({ type: ActionType.SETUP, payload: { sourceUrl: url, duration } });
-            }).catch(() => (
-                dispatch({ type: ActionType.STOP })
-            ));
-    }, [currentSong]);
+        const controller = new AbortController();
+
+        fetch(`/api/source?id=${currentSong.id}`, {
+            signal: controller.signal
+        }).then(res => {
+            if (!res.ok)
+                throw new Error(`${res.status} - ${res.statusText}`);
+            return res.json();
+        }).then(json => {
+            const { url, duration } = json;
+            dispatch({ type: ActionType.SETUP, payload: { sourceUrl: url, duration } });
+        }).catch(() => {
+            dispatch({ type: ActionType.STOP });
+            toast({
+                title: "Unexpected error",
+                description: "An error occurred while retrieving the track information",
+                status: "error",
+                duration: 3500
+            });
+        });
+
+        return () => {
+            controller?.abort();
+        };
+    }, [currentSong, toast]);
 
     useEffect(() => {
         if (!audioRef.current)
