@@ -4,13 +4,23 @@ import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
 import { PlayerBar, SongInfo, SongProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
 
+const initLocalStorage = (state: typeof initialState) => {
+    const initialVolume = typeof window !== "undefined" && localStorage.getItem("volume");
+    return {
+        ...state,
+        volume: initialVolume
+            ? +initialVolume
+            : state.volume
+    };
+};
+
 type Props = {
     [key: string]: any
 };
 
 const Player: FC<Props> = (props) => {
     const { remainingQueue, currentSong, canPrev, prevSong, nextSong, isShuffle, toggleShuffle, repeatType, toggleRepeat, goTo } = useQueue();
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState, initLocalStorage);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const togglePlay = useCallback(() => (
@@ -88,6 +98,7 @@ const Player: FC<Props> = (props) => {
     useEffect(() => {
         if (audioRef.current)
             audioRef.current.volume = state.volume / 100;
+        localStorage.setItem("volume", state.volume.toString());
     }, [state.volume]);
 
     useEffect(() => {
@@ -103,6 +114,18 @@ const Player: FC<Props> = (props) => {
 
     return (
         <>
+            <audio
+                ref={audioRef}
+                src={state.sourceUrl}
+                onPlay={() => dispatch({ type: ActionType.PLAY })}
+                onPause={() => dispatch({ type: ActionType.PAUSE })}
+                onEnded={next}
+                loop={repeatType === "one"}
+                onTimeUpdate={(e: SyntheticEvent<HTMLAudioElement> & { target: HTMLAudioElement }) => (
+                    setCurrentTime(e.target.currentTime)
+                )}
+            />
+
             <PlayerBar
                 songInfo={(props) => (
                     <SongInfo
@@ -159,18 +182,6 @@ const Player: FC<Props> = (props) => {
                 )}
                 bg="gray.900"
                 {...props}
-            />
-
-            <audio
-                ref={audioRef}
-                src={state.sourceUrl}
-                onPlay={() => dispatch({ type: ActionType.PLAY })}
-                onPause={() => dispatch({ type: ActionType.PAUSE })}
-                onEnded={next}
-                loop={repeatType === "one"}
-                onTimeUpdate={(e: SyntheticEvent<HTMLAudioElement> & { target: HTMLAudioElement }) => (
-                    setCurrentTime(e.target.currentTime)
-                )}
             />
         </>
     );
