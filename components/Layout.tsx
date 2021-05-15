@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Head from "next/head";
-import { Flex, VStack } from "@chakra-ui/react";
+import { Flex, VStack, useColorModeValue } from "@chakra-ui/react";
 import { Header, Player } from ".";
 
 type Props = {
@@ -14,7 +14,9 @@ const Layout: FC<Props> = ({ children, ...props }) => (
             <link rel="icon" href="/favicon.svg" />
         </Head>
 
-        <Header />
+        <Header
+            bg={useColorModeValue("kaihui.300", "kaihui.900")}
+        />
         <Flex flexGrow={1}>
             {children}
         </Flex>
@@ -22,6 +24,7 @@ const Layout: FC<Props> = ({ children, ...props }) => (
             position="sticky"
             left={0}
             bottom={0}
+            bg={useColorModeValue("kaihui.300", "kaihui.900")}
         />
     </VStack>
 );

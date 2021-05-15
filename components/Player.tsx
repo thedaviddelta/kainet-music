@@ -1,5 +1,5 @@
 import { FC, SyntheticEvent, useEffect, useReducer, useRef, useCallback } from "react";
-import { Image, useToast } from "@chakra-ui/react";
+import { Image, useToast, BackgroundProps } from "@chakra-ui/react";
 import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
 import { PlayerBar, SongInfo, SongProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
@@ -15,6 +15,7 @@ const initLocalStorage = (state: typeof initialState) => {
 };
 
 type Props = {
+    bg: BackgroundProps["bg"],
     [key: string]: any
 };
 
@@ -197,7 +198,6 @@ const Player: FC<Props> = (props) => {
                         {...props}
                     />
                 )}
-                bg="gray.900"
                 {...props}
             />
         </>

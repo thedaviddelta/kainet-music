@@ -2,6 +2,7 @@ export { default as Layout } from "./Layout";
 export { default as Player } from "./Player";
 export { default as Header } from "./Header";
 export { default as SearchBar } from "./SearchBar";
+export { default as ColorModeToggler } from "./ColorModeToggler";
 export { default as PlayerBar } from "./PlayerBar";
 export { default as SongInfo } from "./SongInfo";
 export { default as SongProgress } from "./SongProgress";
