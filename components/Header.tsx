@@ -10,8 +10,11 @@ import {
     Avatar,
     Menu,
     MenuButton,
-    MenuList
+    MenuList,
+    useDisclosure,
+    useBreakpointValue
 } from "@chakra-ui/react";
+import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
 import { FaGithub } from "react-icons/fa";
 import { SearchBar, ColorModeToggler } from ".";
 
@@ -19,59 +22,80 @@ type Props = {
     [key: string]: any
 };
 
-const Header: FC<Props> = (props) => (
-    <HStack
-        w="full"
-        px={[2, 4, 6, 10]}
-        spacing={4}
-        bg="gray.900"
-        {...props}
-    >
-        <Box flex={1} my={1.5}>
-            <NextLink href="/" passHref={true}>
-                <Link display="flex" w="fit-content">
-                    <NextImage
-                        src="/favicon.svg"
-                        alt="Logo"
-                        layout="fixed"
-                        width={56}
-                        height={56}
-                    />
-                </Link>
-            </NextLink>
-        </Box>
+const Header: FC<Props> = (props) => {
+    const { isOpen, onToggle } = useDisclosure();
+    const isMobile = useBreakpointValue([true, null, false]);
+    return (
+        <HStack
+            w="full"
+            h="4.5rem"
+            px={[6, null, null, 10]}
+            {...props}
+        >
+            {(!isMobile || !isOpen) && (
+                <Box flex={1}>
+                    <NextLink href="/" passHref={true}>
+                        <Link display="flex" w="fit-content">
+                            <NextImage
+                                src="/favicon.svg"
+                                alt="Logo"
+                                layout="fixed"
+                                width={56}
+                                height={56}
+                            />
+                        </Link>
+                    </NextLink>
+                </Box>
+            )}
 
-        <SearchBar flex={1} />
+            {(!isMobile || isOpen) && (
+                <Box flex={1}>
+                    <SearchBar />
+                </Box>
+            )}
 
-        <HStack flex={1} justify="flex-end">
-            <ColorModeToggler
-                variant="outline"
-                colorScheme="kaihui"
-            />
-            <IconButton
-                as={Link}
-                href="https://github.com/TheDavidDelta/kainet-music"
-                isExternal={true}
-                aria-label="GitHub"
-                icon={<FaGithub />}
-                variant="outline"
-                colorScheme="kaihui"
-            />
-            <Menu>
-                <MenuButton
-                    as={Button}
-                    px={1.5}
-                    variant="ghost"
+            {isMobile && (
+                <IconButton
+                    aria-label={isOpen ? "Close search" : "Open search"}
+                    icon={isOpen ? <CloseIcon /> : <SearchIcon />}
+                    onClick={onToggle}
+                    variant="outline"
                     colorScheme="kaihui"
-                >
-                    <Avatar size="sm" />
-                </MenuButton>
-                <MenuList textAlign="center">
-                    Coming soon...
-                </MenuList>
-            </Menu>
+                />
+            )}
+
+            {(!isMobile || !isOpen) && (
+                <HStack flex={[0, null, 1]} justify="flex-end">
+                    <ColorModeToggler
+                        variant="outline"
+                        colorScheme="kaihui"
+                    />
+                    <IconButton
+                        as={Link}
+                        href="https://github.com/TheDavidDelta/kainet-music"
+                        isExternal={true}
+                        aria-label="GitHub"
+                        icon={<FaGithub/>}
+                        variant="outline"
+                        colorScheme="kaihui"
+                    />
+                    <Menu>
+                        <MenuButton
+                            as={Button}
+                            px={1.5}
+                            variant="ghost"
+                            colorScheme="kaihui"
+                        >
+                            <Avatar size="sm"/>
+                        </MenuButton>
+                        <MenuList textAlign="center">
+                            Coming soon...
+                        </MenuList>
+                    </Menu>
+                </HStack>
+            )}
         </HStack>
-    </HStack>
-);
+    );
+};
 
 export default Header;

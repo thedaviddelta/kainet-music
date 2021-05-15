@@ -6,7 +6,8 @@ const parseFieldColors = (props: Record<string, any>) => {
     return {
         color: mode(`${c}.600`, `${c}.200`)(props),
         _placeholder: {
-            color: mode(`${c}.600`, `${c}.200`)(props)
+            color: mode(`${c}.600`, `${c}.200`)(props),
+            opacity: 0.6
         },
         borderColor: "currentColor",
         bg: "transparent",
