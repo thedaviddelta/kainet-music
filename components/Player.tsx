@@ -2,7 +2,7 @@ import { FC, SyntheticEvent, useEffect, useReducer, useRef, useCallback } from "
 import { Image, useToast, BackgroundProps } from "@chakra-ui/react";
 import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
-import { PlayerBar, SongInfo, SongProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
+import { PlayerBar, ItemMetadata, SongProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
 
 const initLocalStorage = (state: typeof initialState) => {
     const initialVolume = typeof window !== "undefined" && localStorage.getItem("volume");
@@ -145,10 +145,10 @@ const Player: FC<Props> = (props) => {
             />
 
             <PlayerBar
-                songInfo={(props) => (
-                    <SongInfo
+                itemMetadata={(props) => (
+                    <ItemMetadata
                         title={currentSong?.title ?? "No song"}
-                        artist={currentSong?.artist ?? "Unknown"}
+                        subtitleList={[currentSong?.artist ?? "Unknown"]}
                         {...props}
                     />
                 )}

@@ -1,9 +1,7 @@
 import { FC } from "react";
 import {
-    Box,
     HStack,
     VStack,
-    Image,
     IconButton,
     Popover,
     PopoverTrigger,
@@ -19,7 +17,7 @@ import {
 import { FaPlay } from "react-icons/fa";
 import { RiPlayListFill } from "react-icons/ri";
 import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
-import { SongInfo } from ".";
+import { ItemMetadata, ThumbnailButton } from ".";
 
 type Props = {
     remainingQueue: (YtMusicSong & YtMusicVideo)[],
@@ -69,35 +67,23 @@ const QueuePopover: FC<Props> = ({
                                     <Text size="sm" minW={5} align="right">
                                         {index + 1}
                                     </Text>
-                                    <Box position="relative" minW={12} maxW={12} h={12}>
-                                        <Image
-                                            src={song.thumbnails[song.thumbnails.length - 1] ?? ""}
-                                            fallbackSrc="/fallback.svg"
-                                            alt={song.title}
-                                            top={0}
-                                            left={0}
-                                            w="full"
-                                        />
-                                        <IconButton
-                                            aria-label={`Go to ${song.title}`}
-                                            icon={<FaPlay />}
-                                            onClick={() => goTo(song)}
-                                            position="absolute"
-                                            top={0}
-                                            left={0}
-                                            w="full"
-                                            h="full"
-                                            zIndex={3}
-                                            borderRadius={0}
-                                        />
-                                    </Box>
-                                    <SongInfo
+                                    <ThumbnailButton
+                                        height={12}
+                                        imgSrc={song.thumbnails[song.thumbnails.length - 1] ?? ""}
+                                        imgAlt={song.title}
+                                        btnLabel={`Go to ${song.title}`}
+                                        btnIcon={<FaPlay />}
+                                        btnSize="md"
+                                        onClick={() => goTo(song)}
+                                        isBtnShown={true}
+                                    />
+                                    <ItemMetadata
                                         title={song.title}
-                                        artist={song.artist}
                                         titleFontSize="md"
-                                        artistFontSize="sm"
                                         titleLines={1}
-                                        artistLines={1}
+                                        subtitleList={[song.artist]}
+                                        subtitleFontSize="sm"
+                                        subtitleLines={1}
                                         spacing={0}
                                     />
                                 </HStack>

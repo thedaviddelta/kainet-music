@@ -20,11 +20,11 @@ import {
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 
 type Props = {
-    songInfo: (props: {
+    itemMetadata: (props: {
         titleFontSize: TypographyProps["fontSize"],
-        artistFontSize: TypographyProps["fontSize"],
         titleLines: TypographyProps["noOfLines"],
-        artistLines: TypographyProps["noOfLines"],
+        subtitleFontSize: TypographyProps["fontSize"],
+        subtitleLines: TypographyProps["noOfLines"],
         [key: string]: any
     }) => JSX.Element,
     songThumbnail: (props: {
@@ -62,7 +62,7 @@ const PlayerBar: FC<Props> = (props) => {
 export default PlayerBar;
 
 const PlayerBarDesktop: FC<Props> = ({
-    songInfo,
+    itemMetadata,
     songThumbnail,
     songProgress,
     playbackButtons,
@@ -83,11 +83,11 @@ const PlayerBarDesktop: FC<Props> = ({
                 boxSize: 20,
                 my: 4
             })}
-            {songInfo({
+            {itemMetadata({
                 titleFontSize: "md",
-                artistFontSize: "sm",
                 titleLines: 2,
-                artistLines: 1
+                subtitleFontSize: "sm",
+                subtitleLines: 1
             })}
         </HStack>
 
@@ -113,7 +113,7 @@ const PlayerBarDesktop: FC<Props> = ({
 );
 
 const PlayerBarMobile: FC<Props> = ({
-    songInfo,
+    itemMetadata,
     songThumbnail,
     songProgress,
     playbackButtons,
@@ -135,11 +135,11 @@ const PlayerBarMobile: FC<Props> = ({
                     {songThumbnail({
                         boxSize: 16
                     })}
-                    {songInfo({
+                    {itemMetadata({
                         titleFontSize: "sm",
-                        artistFontSize: "xs",
                         titleLines: 1,
-                        artistLines: 1
+                        subtitleFontSize: "xs",
+                        subtitleLines: 1
                     })}
                 </HStack>
 
@@ -183,11 +183,11 @@ const PlayerBarMobile: FC<Props> = ({
                             })}
 
                             <VStack spacing={4}>
-                                {songInfo({
+                                {itemMetadata({
                                     titleFontSize: "lg",
-                                    artistFontSize: "md",
                                     titleLines: 2,
-                                    artistLines: 1,
+                                    subtitleFontSize: "md",
+                                    subtitleLines: 1,
                                     w: "full",
                                     px: 5,
                                     py: 2

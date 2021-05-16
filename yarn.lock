@@ -831,20 +831,20 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.2.0.tgz#f3933a44e365864f4dad5db94158106d511e8131"
   integrity sha512-sqKVVVOe5ivCaXDWivIJYVSaEgdQK9ul7a4Kity5Iw7u9+wBAPbX1RMSnLLmp7O4Vzj0WOWwMAJsTL00xwaNug==
 
-"@next/env@10.2.0":
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/@next/env/-/env-10.2.0.tgz#154dbce2efa3ad067ebd20b7d0aa9aed775e7c97"
-  integrity sha512-tsWBsn1Rb6hXRaHc/pWMCpZ4Ipkf3OCbZ54ef5ukgIyEvzzGdGFXQshPP2AF7yb+8yMpunWs7vOMZW3e8oPF6A==
+"@next/env@10.2.1-canary.3":
+  version "10.2.1-canary.3"
+  resolved "https://registry.yarnpkg.com/@next/env/-/env-10.2.1-canary.3.tgz#d85799fb4bf6646008eed8c1ab9f4be73ff7a7d5"
+  integrity sha512-y+hVDuNpS02uNtWe2JCTuvkfNer1RgC7kB9PHWpgAq/GzgK0LNV/Hfcb5bmnpiXrvjrt3s9WQYuO+492gUGZ0w==
 
-"@next/polyfill-module@10.2.0":
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/@next/polyfill-module/-/polyfill-module-10.2.0.tgz#61f41110c4b465cc26d113e2054e205df61c3594"
-  integrity sha512-Nl3GexIUXsmuggkUqrRFyE/2k7UI44JaVzSywtXEyHzxpZm2a5bdMaWuC89pgLiFDDOqmbqyLAbtwm5lNxa7Eg==
+"@next/polyfill-module@10.2.1-canary.3":
+  version "10.2.1-canary.3"
+  resolved "https://registry.yarnpkg.com/@next/polyfill-module/-/polyfill-module-10.2.1-canary.3.tgz#0b693484e89c260bc6aca54b7859c880fa6d3276"
+  integrity sha512-K8exwE6vqW54ivCs0SkZWpuV/+HC0QwOdWrzzAC19sj1k5pQNMLxyKcWpZc2tRBKsYq/thqoWYXnKSmuv8Wi9w==
 
-"@next/react-dev-overlay@10.2.0":
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/@next/react-dev-overlay/-/react-dev-overlay-10.2.0.tgz#4220121abac7e3404cbaf467784aeecca8be46cf"
-  integrity sha512-PRIAoWog41hLN4iJ8dChKp4ysOX0Q8yiNQ/cwzyqEd3EjugkDV5OiKl3mumGKaApJaIra1MX6j1wgQRuLhuWMA==
+"@next/react-dev-overlay@10.2.1-canary.3":
+  version "10.2.1-canary.3"
+  resolved "https://registry.yarnpkg.com/@next/react-dev-overlay/-/react-dev-overlay-10.2.1-canary.3.tgz#8af6abe7bbc3b754bffe4bac94f8e237a61b7a79"
+  integrity sha512-zuVLXuhHQmzsE46dMephQrPSWSY70IRfUwZ1ITx4YmS9d6jHG2UdY70oFm6U9XBZZNDEkS02nsnwqlusN2KTRA==
   dependencies:
     "@babel/code-frame" "7.12.11"
     anser "1.4.9"
@@ -858,10 +858,10 @@
     stacktrace-parser "0.1.10"
     strip-ansi "6.0.0"
 
-"@next/react-refresh-utils@10.2.0":
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/@next/react-refresh-utils/-/react-refresh-utils-10.2.0.tgz#55953b697769c6647f371bc6bcd865a24e1a22e9"
-  integrity sha512-3I31K9B4hEQRl7yQ44Umyz+szHtuMJrNdwsgJGhoEnUCXSBRHp5wv5Zv8eDa2NewSbe53b2C0oOpivrzmdBakw==
+"@next/react-refresh-utils@10.2.1-canary.3":
+  version "10.2.1-canary.3"
+  resolved "https://registry.yarnpkg.com/@next/react-refresh-utils/-/react-refresh-utils-10.2.1-canary.3.tgz#91a0db20d22cabf6826152cfd176254bf7d3808b"
+  integrity sha512-AU1Xr63MXt4+BY1wr423QI1PsPdFbo3EnsSxpUH020p4rgJbN6otysGt2JUrbXbIARURGq/GqqEt36vPYllAOg==
 
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
@@ -2967,17 +2967,17 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-next@10.2.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/next/-/next-10.2.0.tgz#6654cc925d8abcb15474fa062fc6b3ee527dd6dc"
-  integrity sha512-PKDKCSF7s82xudu3kQhOEaokxggpbLEWouEUtzP6OqV0YqKYHF+Ff+BFLycEem8ixtTM2M6ElN0VRJcskJfxPQ==
+next@10.2.1-canary.3:
+  version "10.2.1-canary.3"
+  resolved "https://registry.yarnpkg.com/next/-/next-10.2.1-canary.3.tgz#c283b7c3fc3db7f42e156255577aab4498330db6"
+  integrity sha512-j0h68GQB41/OIeLDB8mzgii9xsgF7ETDdOLdmi/yrmZ5vIzjfz2ZQlWFpX0JsuTmfKrAYATCjP8ZPFeiu2rTHw==
   dependencies:
     "@babel/runtime" "7.12.5"
     "@hapi/accept" "5.0.1"
-    "@next/env" "10.2.0"
-    "@next/polyfill-module" "10.2.0"
-    "@next/react-dev-overlay" "10.2.0"
-    "@next/react-refresh-utils" "10.2.0"
+    "@next/env" "10.2.1-canary.3"
+    "@next/polyfill-module" "10.2.1-canary.3"
+    "@next/react-dev-overlay" "10.2.1-canary.3"
+    "@next/react-refresh-utils" "10.2.1-canary.3"
     "@opentelemetry/api" "0.14.0"
     assert "2.0.0"
     ast-types "0.13.2"

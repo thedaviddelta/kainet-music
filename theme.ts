@@ -82,6 +82,26 @@ export default extendTheme({
                     field: parseFieldColors(props)
                 })
             }
+        },
+        Button: {
+            variants: {
+                thumbnail: props => {
+                    const { colorScheme: c, theme } = props;
+                    return {
+                        color: `${c}.50`,
+                        _disabled: {
+                            opacity: 1
+                        },
+                        bg: transparentize(`${c}.300`, 0.15)(theme),
+                        _hover: {
+                            bg: transparentize(`${c}.300`, 0.3)(theme)
+                        },
+                        _active: {
+                            bg: transparentize(`${c}.300`, 0.5)(theme)
+                        },
+                    }
+                }
+            }
         }
     }
 });
