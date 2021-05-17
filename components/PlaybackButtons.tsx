@@ -54,9 +54,9 @@ const PlaybackButtons: FC<Props> = ({
                 aria-label="Shuffle"
                 icon={<RiShuffleLine />}
                 onClick={toggleShuffle}
-                colorScheme={isShuffle ? "kaihong" : "gray"}
+                colorScheme={isShuffle ? "kaihong" : "kaihui"}
             />
-            <ButtonGroup variant="ghost" size={internalSize} isDisabled={isPlaybackEmpty}>
+            <ButtonGroup variant="ghost" colorScheme="kaihui" size={internalSize} isDisabled={isPlaybackEmpty}>
                 <IconButton
                     aria-label="Previous"
                     icon={<FaStepBackward />}
@@ -79,7 +79,7 @@ const PlaybackButtons: FC<Props> = ({
                 aria-label="Repeat"
                 icon={isRepeatingOne ? <RiRepeatOneLine /> : <RiRepeat2Line />}
                 onClick={toggleRepeat}
-                colorScheme={isNotRepeating ? "kaihong" : "gray"}
+                colorScheme={isNotRepeating ? "kaihong" : "kaihui"}
             />
         </ButtonGroup>
     )

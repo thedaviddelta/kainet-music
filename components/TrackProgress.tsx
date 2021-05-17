@@ -20,7 +20,7 @@ type Props = {
     [key: string]: any
 };
 
-const SongProgress: FC<Props> = ({
+const TrackProgress: FC<Props> = ({
     currentTime,
     duration,
     setCurrentTime,
@@ -30,8 +30,8 @@ const SongProgress: FC<Props> = ({
     <HStack {...props}>
         <Text fontSize="xs">{timeToText(currentTime)}</Text>
         <Slider
-            aria-label="Song progress"
-            colorScheme="gray"
+            aria-label="Track progress"
+            colorScheme="kaihui"
             w={width}
             min={0}
             max={duration}
@@ -47,4 +47,4 @@ const SongProgress: FC<Props> = ({
     </HStack>
 );
 
-export default SongProgress;
+export default TrackProgress;

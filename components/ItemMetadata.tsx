@@ -46,7 +46,7 @@ const ItemMetadata: FC<Props> = ({
                 divider={subtitleSeparator}
             >
                 {subtitleList?.map(text => (
-                    <Tooltip label={text} placement="top" openDelay={tooltipOpenDelay}>
+                    <Tooltip key={text} label={text} placement="top" openDelay={tooltipOpenDelay}>
                         <Text fontSize={subtitleFontSize} noOfLines={subtitleLines} userSelect="none">
                             {text}
                         </Text>

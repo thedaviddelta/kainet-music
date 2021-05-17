@@ -17,7 +17,7 @@ const is = {
 
 const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, type }) => {
     const router = useRouter();
-    const { setQueue, addSong, currentSong } = useQueue();
+    const { setQueue, addTrack, currentTrack } = useQueue();
 
     if (router.isFallback)
         return <div>"Loading..."</div>;
@@ -28,87 +28,69 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                 w={["82.5vw", "75vw", "66vw", "52.5vw"]}
                 align="flex-start"
             >
-                {results.map(result => (
-                    is.song(type, result) ? (
+                {results.map(item => (
+                    is.song(type, item) ? (
                         <SearchItem
-                            key={result.id}
-                            imgSrc={result.thumbnails[result.thumbnails.length - 1] ?? ""}
-                            btnLabel={currentSong?.id === result.id ? `Playing song '${result.title}'` : `Play song '${result.title}'`}
-                            btnIcon={currentSong?.id === result.id ? <RiVolumeUpFill /> : <FaPlay />}
-                            onClick={() => setQueue([result])}
-                            isPlaying={currentSong?.id === result.id}
-                            title={result.title}
-                            subtitleListMobile={[result.artist, result.durationText]}
-                            subtitleListDesktop={[result.artist, result.album, result.durationText]}
-                            menuList={(
-                                <>
-                                    <MenuItem icon={<FaPlayCircle />} onClick={() => setQueue([result])} disabled={currentSong?.id === result.id}>
-                                        Play song
-                                    </MenuItem>
-                                    <MenuItem icon={<RiPlayListFill />} onClick={() => addSong(result)}>
-                                        Add to queue
-                                    </MenuItem>
-                                </>
+                            key={item.id}
+                            onClick={() => setQueue([item])}
+                            title={item.title}
+                            subtitleListMobile={[item.artist, item.durationText]}
+                            subtitleListDesktop={[item.artist, item.album, item.durationText]}
+                            imgThumbnails={item.thumbnails}
+                            isPlaying={currentTrack?.id === item.id}
+                            label="Play song"
+                            playingLabel="Playing song"
+                            icon={<FaPlay />}
+                            playingIcon={<RiVolumeUpFill />}
+                            mainActionIcon={<FaPlayCircle />}
+                            extraMenuActions={(
+                                <MenuItem icon={<RiPlayListFill />} onClick={() => addTrack(item)}>
+                                    Add to queue
+                                </MenuItem>
                             )}
                         />
-                    ) : is.video(type, result) ? (
+                    ) : is.video(type, item) ? (
                         <SearchItem
-                            key={result.id}
-                            imgSrc={result.thumbnails[result.thumbnails.length - 1] ?? ""}
+                            key={item.id}
+                            onClick={() => setQueue([item])}
+                            title={item.title}
+                            subtitleListMobile={[item.artist, item.durationText]}
+                            subtitleListDesktop={[item.artist, `${item.views} views`, item.durationText]}
+                            imgThumbnails={item.thumbnails}
                             imgWidth={[28, null, "8.85rem"]}
-                            btnLabel={currentSong?.id === result.id ? `Playing video '${result.title}'` : `Play video '${result.title}'`}
-                            btnIcon={currentSong?.id === result.id ? <RiVolumeUpFill /> : <FaPlay />}
-                            onClick={() => setQueue([result])}
-                            isPlaying={currentSong?.id === result.id}
-                            title={result.title}
-                            subtitleListMobile={[result.artist, result.durationText]}
-                            subtitleListDesktop={[result.artist, `${result.views} views`, result.durationText]}
-                            menuList={(
-                                <>
-                                    <MenuItem icon={<FaPlayCircle />} onClick={() => setQueue([result])} disabled={currentSong?.id === result.id}>
-                                        Play video
-                                    </MenuItem>
-                                    <MenuItem icon={<RiPlayListFill />} onClick={() => addSong(result)}>
-                                        Add to queue
-                                    </MenuItem>
-                                </>
+                            isPlaying={currentTrack?.id === item.id}
+                            label="Play video"
+                            playingLabel="Playing video"
+                            icon={<FaPlay />}
+                            playingIcon={<RiVolumeUpFill />}
+                            mainActionIcon={<FaPlayCircle />}
+                            extraMenuActions={(
+                                <MenuItem icon={<RiPlayListFill />} onClick={() => addTrack(item)}>
+                                    Add to queue
+                                </MenuItem>
                             )}
                         />
-                    ) : is.album(type, result) ? (
+                    ) : is.album(type, item) ? (
                         <SearchItem
-                            key={result.id}
-                            imgSrc={result.thumbnails[result.thumbnails.length - 1] ?? ""}
-                            btnLabel={`Open album '${result.title}'`}
-                            btnIcon={<FaEye />}
+                            key={item.id}
                             onClick={() => {}}
-                            title={result.title}
-                            subtitleListMobile={[result.artist, result.year]}
-                            subtitleListDesktop={[result.artist, result.year]}
-                            menuList={(
-                                <>
-                                    <MenuItem icon={<FaEye />} onClick={() => {}}>
-                                        Open album
-                                    </MenuItem>
-                                </>
-                            )}
+                            title={item.title}
+                            subtitleListMobile={[item.artist, item.year]}
+                            subtitleListDesktop={[item.artist, item.year]}
+                            imgThumbnails={item.thumbnails}
+                            label="Open album"
+                            icon={<FaEye />}
                         />
-                    ) : is.playlist(type, result) ? (
+                    ) : is.playlist(type, item) ? (
                         <SearchItem
-                            key={result.id}
-                            imgSrc={result.thumbnails[result.thumbnails.length - 1] ?? ""}
-                            btnLabel={`Open playlist '${result.title}'`}
-                            btnIcon={<FaEye />}
+                            key={item.id}
                             onClick={() => {}}
-                            title={result.title}
-                            subtitleListMobile={[`${result.songCount} songs`]}
-                            subtitleListDesktop={[`${result.songCount} songs`]}
-                            menuList={(
-                                <>
-                                    <MenuItem icon={<FaEye />} onClick={() => {}}>
-                                        Open playlist
-                                    </MenuItem>
-                                </>
-                            )}
+                            title={item.title}
+                            subtitleListMobile={[`${item.songCount} songs`]}
+                            subtitleListDesktop={[`${item.songCount} songs`]}
+                            imgThumbnails={item.thumbnails}
+                            label="Open playlist"
+                            icon={<FaEye />}
                         />
                     ) : null
                 ))}

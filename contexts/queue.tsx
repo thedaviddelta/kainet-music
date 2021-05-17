@@ -44,20 +44,20 @@ export const useQueue = () => {
 
     return {
         remainingQueue: [...mainQueue.slice(current + 1), ...sortedQueue],
-        currentSong: mainQueue[current],
+        currentTrack: mainQueue[current],
         canPrev: (repeat !== RepeatType.NONE || current > 0) && (mainQueue.length > 0 || sortedQueue.length > 0),
         isShuffle: shuffle,
         repeatType: RepeatType[repeat].toLocaleLowerCase() as Lowercase<keyof typeof RepeatType>,
-        setQueue(queue: (YtMusicSong & YtMusicVideo)[]) {
+        setQueue(queue: (YtMusicSong | YtMusicVideo)[]) {
             dispatch({ type: ActionType.SET, payload: { queue } });
         },
-        addSong(song: YtMusicSong & YtMusicVideo) {
-            dispatch({ type: ActionType.ADD, payload: { song } });
+        addTrack(song: YtMusicSong | YtMusicVideo) {
+            dispatch({ type: ActionType.ADD, payload: { track: song } });
         },
-        prevSong() {
+        prevTrack() {
             dispatch({ type: ActionType.PREV });
         },
-        nextSong() {
+        nextTrack() {
             dispatch({ type: ActionType.NEXT });
         },
         toggleShuffle() {
@@ -67,7 +67,7 @@ export const useQueue = () => {
             dispatch({ type: ActionType.TOGGLE_REPEAT });
         },
         goTo(song: YtMusicSong | YtMusicVideo) {
-            dispatch({ type: ActionType.GOTO, payload: { song } });
+            dispatch({ type: ActionType.GOTO, payload: { track: song } });
         }
     };
 };

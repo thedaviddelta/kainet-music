@@ -6,6 +6,7 @@ import {
     Menu,
     MenuButton,
     MenuList,
+    MenuItem,
     useDisclosure,
     useBreakpointValue,
     useColorModeValue,
@@ -17,30 +18,36 @@ import { RiMore2Fill } from "react-icons/ri";
 import { ItemMetadata, ThumbnailButton } from ".";
 
 type Props = {
-    imgSrc: string,
-    imgWidth?: LayoutProps["w"],
-    btnLabel: string,
-    btnIcon: IconButtonProps["icon"],
     onClick: DOMAttributes<any>["onClick"],
-    isPlaying?: boolean,
     title: string,
     subtitleListMobile: string[],
     subtitleListDesktop: string[],
-    menuList: JSX.Element,
+    imgThumbnails: string[],
+    imgWidth?: LayoutProps["w"],
+    isPlaying?: boolean,
+    label: string,
+    playingLabel?: string,
+    icon: IconButtonProps["icon"],
+    playingIcon?: IconButtonProps["icon"],
+    mainActionIcon?: IconButtonProps["icon"],
+    extraMenuActions?: JSX.Element,
     [key: string]: any
 };
 
 const SearchItem: FC<Props> = ({
-    imgSrc,
-    imgWidth,
-    btnLabel,
-    btnIcon,
     onClick,
-    isPlaying,
     title,
     subtitleListMobile,
     subtitleListDesktop,
-    menuList,
+    imgThumbnails,
+    imgWidth,
+    isPlaying,
+    label,
+    playingLabel,
+    icon,
+    playingIcon,
+    mainActionIcon,
+    extraMenuActions,
     ...props
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -63,11 +70,11 @@ const SearchItem: FC<Props> = ({
             <ThumbnailButton
                 width={imgWidth}
                 height={[16, null, 20]}
-                imgSrc={imgSrc}
+                imgSrc={imgThumbnails[imgThumbnails.length - 1] ?? ""}
                 imgAlt={title}
                 brLeft="md"
-                btnLabel={btnLabel}
-                btnIcon={btnIcon}
+                btnLabel={isPlaying ? `${playingLabel} '${title}'` : `${label} '${title}'`}
+                btnIcon={isPlaying ? playingIcon : icon}
                 btnSize="lg"
                 onClick={onClick}
                 isBtnShown={isMobile || isOpen || isPlaying}
@@ -99,8 +106,11 @@ const SearchItem: FC<Props> = ({
                     variant="ghost"
                     colorScheme="kaihui"
                 />
-                <MenuList fontSize={["sm", null, "md"]}>
-                    {menuList}
+                <MenuList fontSize={["sm", null, "md"]} zIndex={6}>
+                    <MenuItem icon={mainActionIcon ?? icon} onClick={onClick} disabled={isPlaying}>
+                        {label}
+                    </MenuItem>
+                    {extraMenuActions}
                 </MenuList>
             </Menu>
         </HStack>

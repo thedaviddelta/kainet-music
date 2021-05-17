@@ -6,7 +6,7 @@ export { default as ColorModeToggler } from "./ColorModeToggler";
 export { default as PlayerBar } from "./PlayerBar";
 export { default as SearchItem } from "./SearchItem";
 export { default as ItemMetadata } from "./ItemMetadata";
-export { default as SongProgress } from "./SongProgress";
+export { default as TrackProgress } from "./TrackProgress";
 export { default as PlaybackButtons } from "./PlaybackButtons";
 export { default as QueuePopover } from "./QueuePopover";
 export { default as VolumeControl } from "./VolumeControl";

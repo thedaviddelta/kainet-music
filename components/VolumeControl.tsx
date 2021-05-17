@@ -15,7 +15,7 @@ const VolumeControl: FC<Props> = ({
 }) => (
     <Slider
         aria-label="Volume"
-        colorScheme="gray"
+        colorScheme="kaihui"
         min={0}
         max={100}
         value={volume}
@@ -26,7 +26,7 @@ const VolumeControl: FC<Props> = ({
         <SliderTrack>
             <SliderFilledTrack />
         </SliderTrack>
-        <SliderThumb boxSize={4} color="black" bg="gray.200" p="0.1rem">
+        <SliderThumb boxSize={4} color="black" bg="kaihui.200" p="0.1rem">
             {volume > 50 ? <RiVolumeUpFill /> : <RiVolumeDownFill />}
         </SliderThumb>
     </Slider>

@@ -2,7 +2,7 @@ import { FC, SyntheticEvent, useEffect, useReducer, useRef, useCallback } from "
 import { Image, useToast, BackgroundProps } from "@chakra-ui/react";
 import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
-import { PlayerBar, ItemMetadata, SongProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
+import { PlayerBar, ItemMetadata, TrackProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
 
 const initLocalStorage = (state: typeof initialState) => {
     const initialVolume = typeof window !== "undefined" && localStorage.getItem("volume");
@@ -20,7 +20,7 @@ type Props = {
 };
 
 const Player: FC<Props> = (props) => {
-    const { remainingQueue, currentSong, canPrev, prevSong, nextSong, isShuffle, toggleShuffle, repeatType, toggleRepeat, goTo } = useQueue();
+    const { remainingQueue, currentTrack, canPrev, prevTrack, nextTrack, isShuffle, toggleShuffle, repeatType, toggleRepeat, goTo } = useQueue();
     const [state, dispatch] = useReducer(reducer, initialState, initLocalStorage);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const toast = useToast();
@@ -39,23 +39,23 @@ const Player: FC<Props> = (props) => {
 
     const prev = useCallback(() => {
         if (canPrev && state.currentTime <= 5)
-            prevSong();
+            prevTrack();
         setCurrentTime(0, true);
-    }, [canPrev, prevSong, state.currentTime, setCurrentTime]);
+    }, [canPrev, prevTrack, state.currentTime, setCurrentTime]);
 
     const next = useCallback(() => {
-        nextSong();
+        nextTrack();
         setCurrentTime(0, true);
-    }, [nextSong, setCurrentTime]);
+    }, [nextTrack, setCurrentTime]);
 
     useEffect(() => {
-        if (!currentSong)
+        if (!currentTrack)
             return dispatch({ type: ActionType.STOP });
 
         dispatch({ type: ActionType.PAUSE });
         const controller = new AbortController();
 
-        fetch(`/api/source?id=${currentSong.id}`, {
+        fetch(`/api/source?id=${currentTrack.id}`, {
             signal: controller.signal
         }).then(res => {
             if (!res.ok)
@@ -77,7 +77,7 @@ const Player: FC<Props> = (props) => {
         return () => {
             controller?.abort();
         };
-    }, [currentSong, toast]);
+    }, [currentTrack, toast]);
 
     useEffect(() => {
         if (!audioRef.current)
@@ -86,21 +86,23 @@ const Player: FC<Props> = (props) => {
             ? audioRef.current.play()
             : audioRef.current.pause();
 
-        if (!navigator.mediaSession || !currentSong)
+        if (!navigator.mediaSession || !currentTrack)
             return;
         navigator.mediaSession.playbackState = state.playback;
         navigator.mediaSession.metadata = state.playback === "none"
             ? null
             : new MediaMetadata({
-                title: currentSong.title,
-                artist: currentSong.artist,
-                album: currentSong.album,
-                artwork: currentSong.thumbnails.map(src => {
+                title: currentTrack.title,
+                artist: currentTrack.artist,
+                album: "album" in currentTrack
+                    ? currentTrack.album
+                    : undefined,
+                artwork: currentTrack.thumbnails.map(src => {
                     const [, width, height] = src.match(/=w(\d+)-h(\d+)/) ?? [];
                     return { src, sizes: width && height && `${width}x${height}`  };
                 })
             });
-    }, [state.playback, currentSong]);
+    }, [state.playback, currentTrack]);
 
     useEffect(() => {
         if (!state.timeUpdated || !audioRef.current)
@@ -147,21 +149,21 @@ const Player: FC<Props> = (props) => {
             <PlayerBar
                 itemMetadata={(props) => (
                     <ItemMetadata
-                        title={currentSong?.title ?? "No song"}
-                        subtitleList={[currentSong?.artist ?? "Unknown"]}
+                        title={currentTrack?.title ?? "No track"}
+                        subtitleList={[currentTrack?.artist ?? "Unknown"]}
                         {...props}
                     />
                 )}
-                songThumbnail={(props) => (
+                trackThumbnail={(props) => (
                     <Image
-                        src={currentSong?.thumbnails?.[currentSong.thumbnails.length - 1] ?? ""}
+                        src={currentTrack?.thumbnails?.[currentTrack.thumbnails.length - 1] ?? ""}
                         fallbackSrc="/fallback.svg"
-                        alt={currentSong?.title ?? "No song"}
+                        alt={currentTrack?.title ?? "No track"}
                         {...props}
                     />
                 )}
-                songProgress={(props) => (
-                    <SongProgress
+                trackProgress={(props) => (
+                    <TrackProgress
                         currentTime={state.currentTime}
                         duration={state.duration}
                         setCurrentTime={setCurrentTime}

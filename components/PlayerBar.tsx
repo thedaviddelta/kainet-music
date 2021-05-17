@@ -27,11 +27,11 @@ type Props = {
         subtitleLines: TypographyProps["noOfLines"],
         [key: string]: any
     }) => JSX.Element,
-    songThumbnail: (props: {
+    trackThumbnail: (props: {
         boxSize: LayoutProps["boxSize"],
         [key: string]: any
     }) => JSX.Element,
-    songProgress: (props: {
+    trackProgress: (props: {
         width: LayoutProps["w"],
         [key: string]: any
     }) => JSX.Element,
@@ -63,8 +63,8 @@ export default PlayerBar;
 
 const PlayerBarDesktop: FC<Props> = ({
     itemMetadata,
-    songThumbnail,
-    songProgress,
+    trackThumbnail,
+    trackProgress,
     playbackButtons,
     queuePopover,
     volumeControl,
@@ -79,7 +79,7 @@ const PlayerBarDesktop: FC<Props> = ({
         {...props}
     >
         <HStack flex={1}>
-            {songThumbnail({
+            {trackThumbnail({
                 boxSize: 20,
                 my: 4
             })}
@@ -97,7 +97,7 @@ const PlayerBarDesktop: FC<Props> = ({
                 internalSize: "md",
                 alignItems: "center"
             })}
-            {songProgress({
+            {trackProgress({
                 width: [64, null, null, 96]
             })}
         </VStack>
@@ -114,8 +114,8 @@ const PlayerBarDesktop: FC<Props> = ({
 
 const PlayerBarMobile: FC<Props> = ({
     itemMetadata,
-    songThumbnail,
-    songProgress,
+    trackThumbnail,
+    trackProgress,
     playbackButtons,
     queuePopover,
     volumeControl,
@@ -132,7 +132,7 @@ const PlayerBarMobile: FC<Props> = ({
                 {...props}
             >
                 <HStack flexGrow={1}>
-                    {songThumbnail({
+                    {trackThumbnail({
                         boxSize: 16
                     })}
                     {itemMetadata({
@@ -151,6 +151,7 @@ const PlayerBarMobile: FC<Props> = ({
                         aria-label="Toggle player collapse"
                         icon={<RiArrowDropUpLine size="2.5rem" />}
                         onClick={onOpen}
+                        colorScheme="kaihui"
                     />
                 </ButtonGroup>
             </HStack>
@@ -167,7 +168,7 @@ const PlayerBarMobile: FC<Props> = ({
             >
                 <ModalOverlay />
                 <ModalContent margin={0} bg={bg}>
-                    <ModalCloseButton size="lg" top={5} left={3} right={0}>
+                    <ModalCloseButton size="lg" colorScheme="kaihui" top={5} left={3} right={0}>
                         <RiArrowDropDownLine size="2.5rem" />
                     </ModalCloseButton>
                     <ModalBody
@@ -178,7 +179,7 @@ const PlayerBarMobile: FC<Props> = ({
                         display="flex"
                     >
                         <VStack flex={1} justify="space-around">
-                            {songThumbnail({
+                            {trackThumbnail({
                                 boxSize: "64vw"
                             })}
 
@@ -194,7 +195,7 @@ const PlayerBarMobile: FC<Props> = ({
                                 })}
 
                                 <VStack>
-                                    {songProgress({
+                                    {trackProgress({
                                         width: "66vw"
                                     })}
                                     {playbackButtons({

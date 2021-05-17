@@ -7,9 +7,9 @@ export enum RepeatType {
 }
 
 type State = {
-    mainQueue: (YtMusicSong & YtMusicVideo)[],
-    nextQueue: (YtMusicSong & YtMusicVideo)[],
-    sortedQueue: (YtMusicSong & YtMusicVideo)[],
+    mainQueue: (YtMusicSong | YtMusicVideo)[],
+    nextQueue: (YtMusicSong | YtMusicVideo)[],
+    sortedQueue: (YtMusicSong | YtMusicVideo)[],
     current: number,
     shuffle: boolean,
     repeat: RepeatType
@@ -37,12 +37,12 @@ export enum ActionType {
 export type Action = {
     type: ActionType.SET,
     payload: {
-        queue: (YtMusicSong & YtMusicVideo)[]
+        queue: (YtMusicSong | YtMusicVideo)[]
     }
 } | {
     type: ActionType.ADD,
     payload: {
-        song: YtMusicSong | YtMusicVideo
+        track: YtMusicSong | YtMusicVideo
     }
 } | {
     type: ActionType.PREV
@@ -55,7 +55,7 @@ export type Action = {
 } | {
     type: ActionType.GOTO,
     payload: {
-        song: YtMusicSong | YtMusicVideo
+        track: YtMusicSong | YtMusicVideo
     }
 };
 
@@ -63,11 +63,11 @@ export default function reducer(state: State, action: Action): State {
     switch (action.type) {
         case ActionType.SET:
             const queue = [...action.payload.queue];
-            const firstSong = queue.shift();
+            const firstTrack = queue.shift();
             return {
                 ...state,
-                mainQueue: firstSong
-                    ? [firstSong]
+                mainQueue: firstTrack
+                    ? [firstTrack]
                     : [],
                 nextQueue: queue,
                 sortedQueue: state.shuffle
@@ -80,7 +80,7 @@ export default function reducer(state: State, action: Action): State {
                 ...state,
                 mainQueue: [
                     ...state.mainQueue,
-                    action.payload.song
+                    action.payload.track
                 ]
             };
         case ActionType.PREV:
@@ -97,15 +97,15 @@ export default function reducer(state: State, action: Action): State {
 
             if (state.repeat === RepeatType.ALL) {
                 const sortedQueue = [...state.sortedQueue];
-                const lastSong = sortedQueue.pop();
+                const lastTrack = sortedQueue.pop();
 
                 return {
                     ...state,
                     current: 0,
-                    mainQueue: lastSong
-                        ? [lastSong, ...state.mainQueue]
+                    mainQueue: lastTrack
+                        ? [lastTrack, ...state.mainQueue]
                         : state.mainQueue,
-                    nextQueue: state.nextQueue.filter(song => song !== lastSong),
+                    nextQueue: state.nextQueue.filter(track => track !== lastTrack),
                     sortedQueue
                 };
             }
@@ -129,10 +129,12 @@ export default function reducer(state: State, action: Action): State {
 
             if (state.sortedQueue.length <= 0 && state.repeat === RepeatType.ALL) {
                 const mainQueue = [...state.mainQueue];
-                const firstSong = mainQueue.shift();
+                const firstTrack = mainQueue.shift();
                 return {
                     ...state,
-                    mainQueue: firstSong ? [firstSong] : [],
+                    mainQueue: firstTrack
+                        ? [firstTrack]
+                        : [],
                     nextQueue: mainQueue,
                     sortedQueue: mainQueue,
                     current: 0
@@ -140,15 +142,15 @@ export default function reducer(state: State, action: Action): State {
             }
 
             const sortedQueue = [...state.sortedQueue];
-            const nextSong = sortedQueue.shift();
+            const nextTrack = sortedQueue.shift();
 
             return {
                 ...state,
                 current: nextIndex,
-                mainQueue: nextSong
-                    ? [...state.mainQueue, nextSong]
+                mainQueue: nextTrack
+                    ? [...state.mainQueue, nextTrack]
                     : state.mainQueue,
-                nextQueue: state.nextQueue.filter(song => song !== nextSong),
+                nextQueue: state.nextQueue.filter(track => track !== nextTrack),
                 sortedQueue
             };
         case ActionType.TOGGLE_SHUFFLE:
@@ -168,15 +170,15 @@ export default function reducer(state: State, action: Action): State {
                     : 0
             };
         case ActionType.GOTO:
-            const searchedSong = action.payload.song;
-            const mainIndex = state.mainQueue.findIndex(song => song === searchedSong);
+            const searchedTrack = action.payload.track;
+            const mainIndex = state.mainQueue.findIndex(track => track === searchedTrack);
             if (mainIndex !== -1)
                 return {
                     ...state,
                     current: mainIndex
                 };
 
-            const finalIndex = state.sortedQueue.findIndex(song => song === searchedSong);
+            const finalIndex = state.sortedQueue.findIndex(track => track === searchedTrack);
             if (finalIndex === -1)
                 return {
                     ...state,
@@ -185,13 +187,12 @@ export default function reducer(state: State, action: Action): State {
 
             const newMainQueue = state.sortedQueue.slice(0, finalIndex + 1);
             const finalSortedQueue = state.sortedQueue.slice(finalIndex + 1);
-            console.log(state.sortedQueue, newMainQueue, finalSortedQueue);
 
             return {
                 ...state,
                 current: state.mainQueue.length + finalIndex,
                 mainQueue: [...state.mainQueue, ...newMainQueue],
-                nextQueue: state.nextQueue.filter(song => !finalSortedQueue.includes(song)),
+                nextQueue: state.nextQueue.filter(track => !finalSortedQueue.includes(track)),
                 sortedQueue: finalSortedQueue
             };
         default:

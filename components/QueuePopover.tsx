@@ -20,7 +20,7 @@ import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
 import { ItemMetadata, ThumbnailButton } from ".";
 
 type Props = {
-    remainingQueue: (YtMusicSong & YtMusicVideo)[],
+    remainingQueue: (YtMusicSong | YtMusicVideo)[],
     goTo: (song: YtMusicSong | YtMusicVideo) => void,
     placement: UsePopoverProps["placement"],
     [key: string]: any
@@ -62,26 +62,26 @@ const QueuePopover: FC<Props> = ({
                         </Text>
                     ) : (
                         <VStack mb={2}>
-                            {remainingQueue.map((song, index) => (
-                                <HStack w="full" key={song.id}>
+                            {remainingQueue.map((track, index) => (
+                                <HStack key={track.id} w="full">
                                     <Text size="sm" minW={5} align="right">
                                         {index + 1}
                                     </Text>
                                     <ThumbnailButton
                                         height={12}
-                                        imgSrc={song.thumbnails[song.thumbnails.length - 1] ?? ""}
-                                        imgAlt={song.title}
-                                        btnLabel={`Go to ${song.title}`}
+                                        imgSrc={track.thumbnails[track.thumbnails.length - 1] ?? ""}
+                                        imgAlt={track.title}
+                                        btnLabel={`Go to ${track.title}`}
                                         btnIcon={<FaPlay />}
                                         btnSize="md"
-                                        onClick={() => goTo(song)}
+                                        onClick={() => goTo(track)}
                                         isBtnShown={true}
                                     />
                                     <ItemMetadata
-                                        title={song.title}
+                                        title={track.title}
                                         titleFontSize="md"
                                         titleLines={1}
-                                        subtitleList={[song.artist]}
+                                        subtitleList={[track.artist]}
                                         subtitleFontSize="sm"
                                         subtitleLines={1}
                                         spacing={0}
