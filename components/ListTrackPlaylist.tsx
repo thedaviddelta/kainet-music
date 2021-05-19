@@ -1,12 +1,12 @@
 import { FC, DOMAttributes, } from "react";
-import { Td } from "@chakra-ui/react";
+import { Flex, Td } from "@chakra-ui/react";
 import { FaPlay } from "react-icons/fa";
 import { RiVolumeUpFill } from "react-icons/ri";
-import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
+import { YtMusicTrack } from "kainet-scraper";
 import { ThumbnailButton, ItemMetadata } from ".";
 
 type Props = {
-    track: YtMusicSong | YtMusicVideo,
+    track: YtMusicTrack,
     playLabel: string,
     showAlbum: boolean,
     onClick: DOMAttributes<any>["onClick"],
@@ -23,19 +23,22 @@ const ListTrackPlaylist: FC<Props> = ({
     isOpen
 }) => (
     <>
-        <Td isNumeric={true} p={1.5} pr={0}>
-            <ThumbnailButton
-                height={"album" in track && track.album ? [12, null, 14] : ["1.85rem", null, "2.1rem"]}
-                width={[12, null, 14]}
-                imgSrc={track.thumbnails[track.thumbnails.length - 1]}
-                imgAlt={track.title}
-                btnLabel={`${playLabel} '${track.title}'`}
-                btnIcon={isPlaying ? <RiVolumeUpFill /> : <FaPlay />}
-                btnSize="lg"
-                onClick={onClick}
-                isBtnShown={isOpen || isPlaying}
-                isDisabled={isPlaying}
-            />
+        <Td isNumeric={true} p={1.5} pr={0.5}>
+            <Flex justify="flex-end">
+                <ThumbnailButton
+                    height={track.type === "song" ? [12, null, 14] : ["1.85rem", null, "2.1rem"]}
+                    width={[12, null, 14]}
+                    imgSrc={track.thumbnails[track.thumbnails.length - 1]}
+                    imgAlt={track.title}
+                    btnLabel={`${playLabel} '${track.title}'`}
+                    btnIcon={isPlaying ? <RiVolumeUpFill /> : <FaPlay />}
+                    btnSize="lg"
+                    onClick={onClick}
+                    isBtnShown={isOpen || isPlaying}
+                    isDisabled={isPlaying}
+                    p={0}
+                />
+            </Flex>
         </Td>
 
         <Td>
@@ -52,7 +55,7 @@ const ListTrackPlaylist: FC<Props> = ({
 
         {showAlbum && (
             <Td>
-                {"album" in track && track.album}
+                {track.type === "song" && track.album}
             </Td>
         )}
     </>

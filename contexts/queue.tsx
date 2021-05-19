@@ -1,5 +1,5 @@
 import { createContext, Dispatch, FC, useContext, useReducer, useEffect } from "react";
-import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
+import { YtMusicTrack } from "kainet-scraper";
 import reducer, { Action, ActionType, initialState, RepeatType } from "@reducers/queue";
 
 const QueueContext = createContext<[
@@ -48,10 +48,10 @@ export const useQueue = () => {
         canPrev: (repeat !== RepeatType.NONE || current > 0) && (mainQueue.length > 0 || sortedQueue.length > 0),
         isShuffle: shuffle,
         repeatType: RepeatType[repeat].toLocaleLowerCase() as Lowercase<keyof typeof RepeatType>,
-        setQueue(queue: (YtMusicSong | YtMusicVideo)[]) {
+        setQueue(queue: YtMusicTrack[]) {
             dispatch({ type: ActionType.SET, payload: { queue } });
         },
-        addTrack(song: YtMusicSong | YtMusicVideo) {
+        addTrack(song: YtMusicTrack) {
             dispatch({ type: ActionType.ADD, payload: { track: song } });
         },
         prevTrack() {
@@ -66,7 +66,7 @@ export const useQueue = () => {
         toggleRepeat() {
             dispatch({ type: ActionType.TOGGLE_REPEAT });
         },
-        goTo(song: YtMusicSong | YtMusicVideo) {
+        goTo(song: YtMusicTrack) {
             dispatch({ type: ActionType.GOTO, payload: { track: song } });
         }
     };

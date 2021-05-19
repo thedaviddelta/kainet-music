@@ -4,6 +4,7 @@ export { default as Header } from "./Header";
 export { default as SearchBar } from "./SearchBar";
 export { default as ColorModeToggler } from "./ColorModeToggler";
 export { default as PlayerBar } from "./PlayerBar";
+export { default as LocalLink } from "./LocalLink";
 export { default as SearchItem } from "./SearchItem";
 export { default as ListTrack } from "./ListTrack";
 export { default as ListTrackAlbum } from "./ListTrackAlbum";

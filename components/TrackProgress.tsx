@@ -1,16 +1,6 @@
 import { FC } from "react";
 import { HStack, Text, Slider, SliderTrack, SliderFilledTrack, LayoutProps } from "@chakra-ui/react";
-
-const timeToText = (secs: number = 0) => {
-    const hours = Math.floor(secs / 3600);
-    const hoursRest = Math.floor(secs % 3600);
-    const mins = Math.floor(hoursRest / 60);
-    const minsRest = Math.floor(hoursRest % 60);
-    return [hours || -1, mins, minsRest]
-        .filter(el => el >= 0)
-        .map(el => el.toString().padStart(3 - el.toString().length, "0"))
-        .join(":");
-};
+import { parseDuration } from "kainet-scraper";
 
 type Props = {
     currentTime: number,
@@ -28,7 +18,7 @@ const TrackProgress: FC<Props> = ({
     ...props
 }) => (
     <HStack {...props}>
-        <Text fontSize="xs">{timeToText(currentTime)}</Text>
+        <Text fontSize="xs">{parseDuration.toText(currentTime) ?? "00:00"}</Text>
         <Slider
             aria-label="Track progress"
             colorScheme="kaihui"
@@ -43,7 +33,7 @@ const TrackProgress: FC<Props> = ({
                 <SliderFilledTrack />
             </SliderTrack>
         </Slider>
-        <Text fontSize="xs">{timeToText(duration)}</Text>
+        <Text fontSize="xs">{parseDuration.toText(duration) ?? "00:00"}</Text>
     </HStack>
 );
 

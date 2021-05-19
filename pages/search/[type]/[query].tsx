@@ -4,28 +4,20 @@ import { useRouter } from "next/router";
 import { VStack, MenuItem } from "@chakra-ui/react";
 import { FaPlay, FaPlayCircle, FaEye } from "react-icons/fa";
 import { RiPlayListFill, RiVolumeUpFill } from "react-icons/ri";
-import { search, YtMusicSong, YtMusicVideo, YtMusicAlbum, YtMusicPlaylist } from "kainet-scraper";
+import { search, YtMusicElement, YtMusicArtist } from "kainet-scraper";
 import { Layout, SearchItem } from "@components";
 import { useQueue } from "@contexts/queue";
 
-const is = {
-    song: (type: string, obj: any): obj is YtMusicSong => type === "songs",
-    video: (type: string, obj: any): obj is YtMusicVideo => type === "videos",
-    album: (type: string, obj: any): obj is YtMusicAlbum => type === "albums",
-    playlist: (type: string, obj: any): obj is YtMusicPlaylist => type === "playlists"
-};
-
 type Props = {
-    results: (YtMusicSong | YtMusicVideo | YtMusicAlbum | YtMusicPlaylist)[],
-    type: "songs" | "videos" | "albums" | "playlists"
+    results: (Exclude<YtMusicElement, YtMusicArtist>)[]
 };
 
-const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, type }) => {
+const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results }) => {
     const router = useRouter();
     const { setQueue, addTrack, currentTrack } = useQueue();
 
     if (router.isFallback)
-        return <div>"Loading..."</div>;
+        return <div>Loading...</div>;
 
     return (
         <Layout>
@@ -34,7 +26,7 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                 align="flex-start"
             >
                 {results.map(item => (
-                    is.song(type, item) ? (
+                    item.type === "song" ? (
                         <SearchItem
                             key={item.id}
                             onClick={() => setQueue([item])}
@@ -54,13 +46,13 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                                 </MenuItem>
                             )}
                         />
-                    ) : is.video(type, item) ? (
+                    ) : item.type === "video" ? (
                         <SearchItem
                             key={item.id}
                             onClick={() => setQueue([item])}
                             title={item.title}
                             subtitlesMobile={[item.artist, item.durationText]}
-                            subtitlesDesktop={[item.artist, `${item.views} views`, item.durationText]}
+                            subtitlesDesktop={[item.artist, item.views ? `${item.views} views` : "", item.durationText]}
                             imgThumbnails={item.thumbnails}
                             imgWidth={[28, null, "8.85rem"]}
                             isPlaying={currentTrack?.id === item.id}
@@ -75,10 +67,10 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                                 </MenuItem>
                             )}
                         />
-                    ) : is.album(type, item) ? (
+                    ) : item.type === "album" ? (
                         <SearchItem
                             key={item.id}
-                            onClick={() => router.push(`/album/${encodeURIComponent(item.browseId)}`)}
+                            href={`/album/${encodeURIComponent(item.browseId)}`}
                             title={item.title}
                             subtitlesMobile={[item.artist, item.year]}
                             subtitlesDesktop={[item.artist, item.year]}
@@ -86,13 +78,13 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                             label="Open album"
                             icon={<FaEye />}
                         />
-                    ) : is.playlist(type, item) ? (
+                    ) : item.type === "playlist" ? (
                         <SearchItem
                             key={item.id}
-                            onClick={() => router.push(`/playlist/${encodeURIComponent(item.browseId)}`)}
+                            href={`/playlist/${encodeURIComponent(item.browseId)}`}
                             title={item.title}
-                            subtitlesMobile={[`${item.songCount} songs`]}
-                            subtitlesDesktop={[`${item.songCount} songs`]}
+                            subtitlesMobile={[item.trackCount ? `${item.trackCount} songs` : ""]}
+                            subtitlesDesktop={[item.trackCount ? `${item.trackCount} songs` : ""]}
                             imgThumbnails={item.thumbnails}
                             label="Open playlist"
                             icon={<FaEye />}
@@ -125,8 +117,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     const results = await search(type, query);
     return {
         props: {
-            results,
-            type
+            results
         },
         revalidate: results.length > 0
             ? 6 * 60 * 60 // 6 hours

@@ -1,7 +1,7 @@
 import { useState, FC, FormEventHandler } from "react";
 import { useRouter } from "next/router";
 import { HStack, Input, IconButton, Select, useToast, useColorModeValue } from "@chakra-ui/react";
-import { SearchIcon, } from "@chakra-ui/icons";
+import { SearchIcon } from "@chakra-ui/icons";
 import { MdAudiotrack, MdMusicVideo, MdAlbum, MdLibraryMusic } from "react-icons/md";
 import { SearchType, SearchTypes } from "kainet-scraper";
 

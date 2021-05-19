@@ -58,7 +58,7 @@ const ItemMetadata: FC<Props> = ({
                             {subtitlesSeparators?.[index]}
                         </StackDivider>
                     )}>
-                        {subtitles?.map(text => (
+                        {subtitles?.map(text => text && (
                             <Tooltip key={text} label={text} placement="top" openDelay={tooltipOpenDelay} isDisabled={!showTooltip}>
                                 <Text
                                     fontSize={subtitlesFontSizes[index]}

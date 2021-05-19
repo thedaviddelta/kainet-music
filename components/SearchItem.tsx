@@ -1,6 +1,7 @@
 import { FC, DOMAttributes } from "react";
 import {
     HStack,
+    Button,
     IconButton,
     Menu,
     MenuButton,
@@ -14,10 +15,13 @@ import {
 } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import { RiMore2Fill } from "react-icons/ri";
-import { ItemMetadata, ThumbnailButton } from ".";
+import { ItemMetadata, ThumbnailButton, LocalLink } from ".";
 
-type Props = {
+type Props = ({
     onClick: DOMAttributes<any>["onClick"],
+} | {
+    href: string,
+}) & {
     title: string,
     subtitlesMobile: string[],
     subtitlesDesktop: string[],
@@ -35,6 +39,7 @@ type Props = {
 
 const SearchItem: FC<Props> = ({
     onClick,
+    href,
     title,
     subtitlesMobile,
     subtitlesDesktop,
@@ -67,15 +72,16 @@ const SearchItem: FC<Props> = ({
             {...props}
         >
             <ThumbnailButton
+                onClick={onClick}
+                href={href}
                 width={imgWidth}
                 height={[16, null, 20]}
                 imgSrc={imgThumbnails[imgThumbnails.length - 1] ?? ""}
                 imgAlt={title}
                 brLeft="md"
-                btnLabel={isPlaying ? `${playingLabel} '${title}'` : `${label} '${title}'`}
+                btnLabel={`${isPlaying ? playingLabel : label} '${title}'`}
                 btnIcon={isPlaying ? playingIcon : icon}
                 btnSize="lg"
-                onClick={onClick}
                 isBtnShown={isMobile || isOpen || isPlaying}
                 isDisabled={isPlaying}
             />
@@ -105,8 +111,16 @@ const SearchItem: FC<Props> = ({
                     colorScheme="kaihui"
                 />
                 <MenuList fontSize={["sm", null, "md"]} zIndex={6}>
-                    <MenuItem icon={mainActionIcon ?? icon} onClick={onClick} disabled={isPlaying}>
-                        {label}
+                    <MenuItem
+                        icon={mainActionIcon ?? icon}
+                        as={href ? LocalLink : null}
+                        onClick={onClick}
+                        href={href}
+                        boxShadow="none !important"
+                        textDecoration="none !important"
+                        isDisabled={isPlaying}
+                    >
+                        {isPlaying ? playingLabel : label}
                     </MenuItem>
                     {extraMenuActions}
                 </MenuList>

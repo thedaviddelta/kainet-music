@@ -17,12 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { FaPlay } from "react-icons/fa";
 import { RiPlayListFill } from "react-icons/ri";
-import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
+import { YtMusicTrack } from "kainet-scraper";
 import { ItemMetadata, ThumbnailButton } from ".";
 
 type Props = {
-    remainingQueue: (YtMusicSong | YtMusicVideo)[],
-    goTo: (song: YtMusicSong | YtMusicVideo) => void,
+    remainingQueue: YtMusicTrack[],
+    goTo: (song: YtMusicTrack) => void,
     placement: UsePopoverProps["placement"],
     selectedColor: ColorProps["color"],
     [key: string]: any

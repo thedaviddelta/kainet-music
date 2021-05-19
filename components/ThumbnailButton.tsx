@@ -1,7 +1,12 @@
 import { FC } from "react";
 import { Box, Image, IconButton, LayoutProps, IconButtonProps } from "@chakra-ui/react";
+import { LocalLink } from ".";
 
-type Props = {
+type Props = ({
+    onClick: IconButtonProps["onClick"],
+} | {
+    href: string,
+}) & {
     width?: LayoutProps["w"],
     height: LayoutProps["h"],
     imgSrc: string,
@@ -10,13 +15,14 @@ type Props = {
     btnLabel: string,
     btnIcon: IconButtonProps["icon"],
     btnSize: IconButtonProps["size"],
-    onClick: IconButtonProps["onClick"],
     isBtnShown: boolean,
     isDisabled?: boolean,
     [key: string]: any
 };
 
 const ThumbnailButton: FC<Props> = ({
+    onClick,
+    href,
     width,
     height,
     imgSrc,
@@ -25,7 +31,6 @@ const ThumbnailButton: FC<Props> = ({
     btnLabel,
     btnIcon,
     btnSize,
-    onClick,
     isBtnShown,
     isDisabled,
     ...props
@@ -51,7 +56,9 @@ const ThumbnailButton: FC<Props> = ({
             <IconButton
                 aria-label={btnLabel}
                 icon={btnIcon}
+                as={href ? LocalLink : null}
                 onClick={onClick}
+                href={href}
                 variant="thumbnail"
                 colorScheme="kaihui"
                 size={btnSize}

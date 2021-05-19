@@ -1,4 +1,4 @@
-import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
+import { YtMusicTrack } from "kainet-scraper";
 
 export enum RepeatType {
     NONE,
@@ -7,9 +7,9 @@ export enum RepeatType {
 }
 
 type State = {
-    mainQueue: (YtMusicSong | YtMusicVideo)[],
-    nextQueue: (YtMusicSong | YtMusicVideo)[],
-    sortedQueue: (YtMusicSong | YtMusicVideo)[],
+    mainQueue: YtMusicTrack[],
+    nextQueue: YtMusicTrack[],
+    sortedQueue: YtMusicTrack[],
     current: number,
     shuffle: boolean,
     repeat: RepeatType
@@ -37,12 +37,12 @@ export enum ActionType {
 export type Action = {
     type: ActionType.SET,
     payload: {
-        queue: (YtMusicSong | YtMusicVideo)[]
+        queue: YtMusicTrack[]
     }
 } | {
     type: ActionType.ADD,
     payload: {
-        track: YtMusicSong | YtMusicVideo
+        track: YtMusicTrack
     }
 } | {
     type: ActionType.PREV
@@ -55,7 +55,7 @@ export type Action = {
 } | {
     type: ActionType.GOTO,
     payload: {
-        track: YtMusicSong | YtMusicVideo
+        track: YtMusicTrack
     }
 };
 

@@ -3,32 +3,20 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { VStack, HStack, Table, Thead, Tbody, Tr, Th, useBreakpointValue } from "@chakra-ui/react";
 import { StarIcon, TimeIcon } from "@chakra-ui/icons";
 import { FaPlay } from "react-icons/fa";
-import { getAlbum, getPlaylist, YtMusicAlbum, YtMusicPlaylist } from "kainet-scraper";
+import { getAlbum, getPlaylist, parseDuration, YtMusicAlbum, YtMusicPlaylist, YtMusicTrack } from "kainet-scraper";
 import { Layout, ListCoverButton, ItemMetadata, ListTrack } from "@components";
 import { useQueue } from "@contexts/queue";
 
-const timeToText = (secs: number = 0) => {
-    const hours = Math.floor(secs / 3600);
-    const hoursRest = Math.floor(secs % 3600);
-    const mins = Math.floor(hoursRest / 60);
-    return hours > 0
-        ? `${hours} hours & ${mins} minutes`
-        : `${mins} minutes`;
-};
-
-const is = {
-    album: (type: string, obj: any): obj is YtMusicAlbum => type === "album",
-    playlist: (type: string, obj: any): obj is YtMusicPlaylist => type === "playlist"
-};
-
 type Props = {
-    list?: YtMusicAlbum | YtMusicPlaylist,
-    type: "album" | "playlist"
+    list?: YtMusicAlbum | YtMusicPlaylist
 };
 
-const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list, type }) => {
+const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list }) => {
     const { setQueue, addTrack, currentTrack } = useQueue();
     const isMobile = useBreakpointValue([true, null, false]);
+
+    if (!list)
+        return <div>None</div>;
 
     return (
         <Layout>
@@ -40,11 +28,11 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list, t
             >
                 <HStack spacing={[5, null, 8]} w={["87.5vw", null, "75vw"]} mx="auto">
                     <ListCoverButton
-                        onClick={() => list?.songs && setQueue(list.songs)}
-                        imgSrc={list?.thumbnails?.[list.thumbnails.length - 1] ?? ""}
-                        imgAlt={list?.title}
+                        onClick={() => list.tracks && setQueue(list.tracks)}
+                        imgSrc={list.thumbnails[list.thumbnails.length - 1] ?? ""}
+                        imgAlt={list.title}
                         imgSize={[40, null, 56]}
-                        btnLabel={`Play full ${type}`}
+                        btnLabel={`Play full ${list.type}`}
                         btnIcon={<FaPlay />}
                         btnSize={["md", null, "lg"]}
                         btnBoxSize={["3.5rem", null, "4.25rem"]}
@@ -53,19 +41,16 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list, t
                     />
 
                     <ItemMetadata
-                        title={list?.title ?? ""}
+                        title={list.title}
                         titleFontSize={["2xl", null, "2rem"]}
                         titleLines={2}
                         subtitlesList={[
-                            is.album(type, list)
-                                ? [
-                                    list?.artist, list?.year
-                                ]
-                                : null,
+                            list.type === "album" ? [list.artist, list.year] : null,
                             [
-                                `${list?.songs?.length ?? 0} songs`,
-                                // @ts-ignore
-                                timeToText(list?.songs?.reduce((acc, track) => acc + track.duration, 0))
+                                list.tracks ? `${list.tracks.length ?? 0} songs` : "",
+                                parseDuration.toDetail((list.tracks as YtMusicTrack[])?.reduce(
+                                    (acc, track) => acc + track.duration, 0
+                                ))
                             ]
                         ]}
                         subtitlesFontSizes={[["md", null, "lg"], ["sm", null, "md"]]}
@@ -87,7 +72,7 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list, t
                             <Th fontSize="inherit">
                                 Title
                             </Th>
-                            {type === "playlist" && !isMobile && (
+                            {list.type === "playlist" && !isMobile && (
                                 <Th fontSize="inherit">
                                     Album
                                 </Th>
@@ -99,11 +84,11 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list, t
                         </Tr>
                     </Thead>
                     <Tbody fontSize={["sm", null, "md"]}>
-                        {list?.songs?.map((track, i) => (
+                        {list.tracks?.map((track, i) => (
                             <ListTrack
                                 key={track.id}
-                                type={type}
                                 track={track}
+                                isAlbum={list.type === "album"}
                                 index={i + 1}
                                 isMobile={isMobile}
                                 onClick={() => setQueue([track])}
@@ -142,8 +127,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 
     return {
         props: {
-            list,
-            type: listType
+            list
         },
         revalidate: list
             ? 6 * 60 * 60 // 6 hours

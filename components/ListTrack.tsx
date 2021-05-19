@@ -2,12 +2,12 @@ import { FC, DOMAttributes } from "react";
 import { Icon, IconButton, Tr, Td, Menu, MenuButton, MenuList, MenuItem, useDisclosure } from "@chakra-ui/react";
 import { FaPlayCircle } from "react-icons/fa";
 import { RiMore2Fill, RiPlayListFill } from "react-icons/ri";
-import { YtMusicSong, YtMusicVideo } from "kainet-scraper";
+import { YtMusicTrack } from "kainet-scraper";
 import { ListTrackAlbum, ListTrackPlaylist } from ".";
 
 type Props = {
-    type: "album" | "playlist",
-    track: YtMusicSong | YtMusicVideo,
+    track: YtMusicTrack,
+    isAlbum: boolean,
     index?: number,
     isMobile: boolean,
     onClick: DOMAttributes<any>["onClick"],
@@ -17,8 +17,8 @@ type Props = {
 };
 
 const ListTrack: FC<Props> = ({
-    type,
     track,
+    isAlbum,
     index,
     isMobile,
     onClick,
@@ -27,11 +27,7 @@ const ListTrack: FC<Props> = ({
     ...props
 }) => {
     const { isOpen, onOpen, onClose} = useDisclosure();
-    const playLabel = type === "album"
-        ? "Play track"
-        : "album" in track && track.album
-            ? "Play song"
-            : "Play video";
+    const playLabel = `${isPlaying ? "Playing" : "Play"} ${isAlbum ? "track" : track.type}`;
 
     return (
         <Tr
@@ -40,7 +36,7 @@ const ListTrack: FC<Props> = ({
             onMouseLeave={onClose}
             {...props}
         >
-            {type === "album" ? (
+            {isAlbum ? (
                 <ListTrackAlbum
                     title={track.title}
                     playLabel={playLabel}
@@ -64,7 +60,7 @@ const ListTrack: FC<Props> = ({
                 {track.durationText}
             </Td>
 
-            <Td>
+            <Td p={0.5}>
                 <Menu>
                     <MenuButton
                         as={IconButton}
@@ -82,8 +78,8 @@ const ListTrack: FC<Props> = ({
                         lineHeight={0}
                     />
                     <MenuList fontSize="inherit" zIndex={6}>
-                        <MenuItem icon={<FaPlayCircle />} onClick={onClick} disabled={isPlaying}>
-                            {"album" in track && track.album ? "Play song" : "Play video"}
+                        <MenuItem icon={<FaPlayCircle />} onClick={onClick} isDisabled={isPlaying}>
+                            {playLabel}
                         </MenuItem>
                         <MenuItem icon={<RiPlayListFill />} onClick={onQueueClick}>
                             Add to queue

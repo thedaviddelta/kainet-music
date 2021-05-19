@@ -1,5 +1,4 @@
 import { FC } from "react";
-import NextLink from "next/link";
 import NextImage from "next/image";
 import {
     Box,
@@ -16,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
 import { FaGithub } from "react-icons/fa";
-import { SearchBar, ColorModeToggler } from ".";
+import { SearchBar, ColorModeToggler, LocalLink } from ".";
 
 type Props = {
     [key: string]: any
@@ -34,17 +33,15 @@ const Header: FC<Props> = (props) => {
         >
             {(!isMobile || !isOpen) && (
                 <Box flex={1}>
-                    <NextLink href="/" passHref={true}>
-                        <Link display="flex" w="fit-content">
-                            <NextImage
-                                src="/favicon.svg"
-                                alt="Logo"
-                                layout="fixed"
-                                width={56}
-                                height={56}
-                            />
-                        </Link>
-                    </NextLink>
+                    <LocalLink href="/" display="flex" w="fit-content">
+                        <NextImage
+                            src="/favicon.svg"
+                            alt="Logo"
+                            layout="fixed"
+                            width={56}
+                            height={56}
+                        />
+                    </LocalLink>
                 </Box>
             )}
 
