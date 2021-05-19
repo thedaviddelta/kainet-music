@@ -54,7 +54,7 @@ const ListTrackPlaylist: FC<Props> = ({
         </Td>
 
         {showAlbum && (
-            <Td>
+            <Td p={0}>
                 {track.type === "song" && track.album}
             </Td>
         )}

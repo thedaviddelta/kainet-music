@@ -9,8 +9,13 @@ import {
     TypographyProps,
     StackProps
 } from "@chakra-ui/react";
+import { LocalLink } from ".";
 
-type Props = {
+type Props = ({
+    titleOnClick?: DOMAttributes<any>["onClick"] | null,
+} | {
+    titleHref?: string,
+}) & {
     title: string,
     titleFontSize: TypographyProps["fontSize"],
     titleLines: TypographyProps["noOfLines"],
@@ -28,6 +33,7 @@ const ItemMetadata: FC<Props> = ({
     titleFontSize,
     titleLines,
     titleOnClick,
+    titleHref,
     subtitlesList,
     subtitlesFontSizes,
     subtitlesLines,
@@ -43,8 +49,12 @@ const ItemMetadata: FC<Props> = ({
                     fontSize={titleFontSize}
                     noOfLines={titleLines}
                     fontWeight="bold"
+                    as={titleHref ? LocalLink : null}
                     onClick={titleOnClick}
-                    _hover={{ cursor: titleOnClick ? "pointer" : titleOnClick === null ? "not-allowed" : "initial" }}
+                    href={titleHref}
+                    boxShadow="none !important"
+                    textDecoration="none !important"
+                    _hover={{ cursor: titleOnClick || titleHref ? "pointer" : titleOnClick === null ? "not-allowed" : "initial" }}
                     userSelect="none"
                 >
                     {title}

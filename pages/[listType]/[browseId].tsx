@@ -38,6 +38,7 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list })
                         btnBoxSize={["3.5rem", null, "4.25rem"]}
                         btnBr={["xl", null, "2xl"]}
                         btnOffset={["-1rem", null, "-1.5rem"]}
+                        isBtnShown={true}
                     />
 
                     <ItemMetadata
@@ -73,7 +74,7 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list })
                                 Title
                             </Th>
                             {list.type === "playlist" && !isMobile && (
-                                <Th fontSize="inherit">
+                                <Th fontSize="inherit" p={0}>
                                     Album
                                 </Th>
                             )}

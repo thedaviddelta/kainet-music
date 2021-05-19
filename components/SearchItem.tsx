@@ -1,7 +1,6 @@
 import { FC, DOMAttributes } from "react";
 import {
     HStack,
-    Button,
     IconButton,
     Menu,
     MenuButton,
@@ -90,7 +89,8 @@ const SearchItem: FC<Props> = ({
                 title={title}
                 titleFontSize={["sm", null, "md"]}
                 titleLines={1}
-                titleOnClick={isPlaying || isMobile ? null : onClick}
+                titleOnClick={isPlaying ? null : isMobile ? undefined : onClick}
+                titleHref={isMobile ? undefined : href}
                 subtitlesList={[useBreakpointValue([subtitlesMobile, null, subtitlesDesktop])]}
                 subtitlesFontSizes={[["xs", null, "sm"]]}
                 subtitlesLines={[1]}
