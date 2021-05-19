@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { IconButton, ButtonGroup, ThemingProps } from "@chakra-ui/react";
+import { IconButton, ButtonGroup, ThemingProps, ColorProps } from "@chakra-ui/react";
 import { FaPlay, FaPause, FaStepBackward, FaStepForward } from "react-icons/fa";
 import { RiShuffleLine, RiRepeat2Line, RiRepeatOneLine } from "react-icons/ri";
 
@@ -20,6 +20,7 @@ type Props = ({
     isNotRepeating: boolean,
     isRepeatingOne: boolean,
     toggleRepeat: () => void,
+    selectedColor: ColorProps["color"],
     [key: string]: any
 }
 
@@ -38,6 +39,7 @@ const PlaybackButtons: FC<Props> = ({
     isNotRepeating,
     isRepeatingOne,
     toggleRepeat,
+    selectedColor,
     ...props
 }) => (
     collapse ? (
@@ -54,7 +56,8 @@ const PlaybackButtons: FC<Props> = ({
                 aria-label="Shuffle"
                 icon={<RiShuffleLine />}
                 onClick={toggleShuffle}
-                colorScheme={isShuffle ? "kaihong" : "kaihui"}
+                colorScheme="kaihui"
+                color={isShuffle ? selectedColor : "currentColor"}
             />
             <ButtonGroup variant="ghost" colorScheme="kaihui" size={internalSize} isDisabled={isPlaybackEmpty}>
                 <IconButton
@@ -79,7 +82,8 @@ const PlaybackButtons: FC<Props> = ({
                 aria-label="Repeat"
                 icon={isRepeatingOne ? <RiRepeatOneLine /> : <RiRepeat2Line />}
                 onClick={toggleRepeat}
-                colorScheme={isNotRepeating ? "kaihong" : "kaihui"}
+                colorScheme="kaihui"
+                color={!isNotRepeating ? selectedColor : "currentColor"}
             />
         </ButtonGroup>
     )

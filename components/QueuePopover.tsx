@@ -12,7 +12,8 @@ import {
     PopoverBody,
     Text,
     useDisclosure,
-    UsePopoverProps
+    UsePopoverProps,
+    ColorProps
 } from "@chakra-ui/react";
 import { FaPlay } from "react-icons/fa";
 import { RiPlayListFill } from "react-icons/ri";
@@ -23,6 +24,7 @@ type Props = {
     remainingQueue: (YtMusicSong | YtMusicVideo)[],
     goTo: (song: YtMusicSong | YtMusicVideo) => void,
     placement: UsePopoverProps["placement"],
+    selectedColor: ColorProps["color"],
     [key: string]: any
 };
 
@@ -30,6 +32,7 @@ const QueuePopover: FC<Props> = ({
     remainingQueue,
     goTo,
     placement,
+    selectedColor,
     ...props
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,7 +49,8 @@ const QueuePopover: FC<Props> = ({
                 <IconButton
                     aria-label="Queue"
                     icon={<RiPlayListFill />}
-                    colorScheme={isOpen ? "kaihong" : "gray"}
+                    colorScheme="kaihui"
+                    color={isOpen ? selectedColor : "currentColor"}
                     variant="ghost"
                     size="lg"
                 />
@@ -81,9 +85,9 @@ const QueuePopover: FC<Props> = ({
                                         title={track.title}
                                         titleFontSize="md"
                                         titleLines={1}
-                                        subtitleList={[track.artist]}
-                                        subtitleFontSize="sm"
-                                        subtitleLines={1}
+                                        subtitlesList={[[track.artist]]}
+                                        subtitlesFontSizes={["sm"]}
+                                        subtitlesLines={[1]}
                                         spacing={0}
                                     />
                                 </HStack>

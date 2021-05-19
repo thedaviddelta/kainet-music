@@ -12,7 +12,12 @@ const is = {
     song: (type: string, obj: any): obj is YtMusicSong => type === "songs",
     video: (type: string, obj: any): obj is YtMusicVideo => type === "videos",
     album: (type: string, obj: any): obj is YtMusicAlbum => type === "albums",
-    playlist: (type: string, obj: any): obj is YtMusicPlaylist => type === "playlists",
+    playlist: (type: string, obj: any): obj is YtMusicPlaylist => type === "playlists"
+};
+
+type Props = {
+    results: (YtMusicSong | YtMusicVideo | YtMusicAlbum | YtMusicPlaylist)[],
+    type: "songs" | "videos" | "albums" | "playlists"
 };
 
 const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, type }) => {
@@ -34,8 +39,8 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                             key={item.id}
                             onClick={() => setQueue([item])}
                             title={item.title}
-                            subtitleListMobile={[item.artist, item.durationText]}
-                            subtitleListDesktop={[item.artist, item.album, item.durationText]}
+                            subtitlesMobile={[item.artist, item.durationText]}
+                            subtitlesDesktop={[item.artist, item.album, item.durationText]}
                             imgThumbnails={item.thumbnails}
                             isPlaying={currentTrack?.id === item.id}
                             label="Play song"
@@ -54,8 +59,8 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                             key={item.id}
                             onClick={() => setQueue([item])}
                             title={item.title}
-                            subtitleListMobile={[item.artist, item.durationText]}
-                            subtitleListDesktop={[item.artist, `${item.views} views`, item.durationText]}
+                            subtitlesMobile={[item.artist, item.durationText]}
+                            subtitlesDesktop={[item.artist, `${item.views} views`, item.durationText]}
                             imgThumbnails={item.thumbnails}
                             imgWidth={[28, null, "8.85rem"]}
                             isPlaying={currentTrack?.id === item.id}
@@ -73,10 +78,10 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                     ) : is.album(type, item) ? (
                         <SearchItem
                             key={item.id}
-                            onClick={() => {}}
+                            onClick={() => router.push(`/album/${encodeURIComponent(item.browseId)}`)}
                             title={item.title}
-                            subtitleListMobile={[item.artist, item.year]}
-                            subtitleListDesktop={[item.artist, item.year]}
+                            subtitlesMobile={[item.artist, item.year]}
+                            subtitlesDesktop={[item.artist, item.year]}
                             imgThumbnails={item.thumbnails}
                             label="Open album"
                             icon={<FaEye />}
@@ -84,10 +89,10 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results, t
                     ) : is.playlist(type, item) ? (
                         <SearchItem
                             key={item.id}
-                            onClick={() => {}}
+                            onClick={() => router.push(`/playlist/${encodeURIComponent(item.browseId)}`)}
                             title={item.title}
-                            subtitleListMobile={[`${item.songCount} songs`]}
-                            subtitleListDesktop={[`${item.songCount} songs`]}
+                            subtitlesMobile={[`${item.songCount} songs`]}
+                            subtitlesDesktop={[`${item.songCount} songs`]}
                             imgThumbnails={item.thumbnails}
                             label="Open playlist"
                             icon={<FaEye />}
@@ -104,7 +109,7 @@ export const getStaticPaths: GetStaticPaths = async () => ({
     fallback: "blocking"
 });
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     if (!params?.type || Array.isArray(params.type) || !params?.query || Array.isArray(params.query))
         return {
             notFound: true

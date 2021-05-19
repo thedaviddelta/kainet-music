@@ -63,6 +63,8 @@ const ThumbnailButton: FC<Props> = ({
                 left={0}
                 w="full"
                 h="full"
+                minW={0}
+                minH={0}
             />
         )}
     </Box>

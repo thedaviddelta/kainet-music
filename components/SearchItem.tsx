@@ -1,7 +1,6 @@
 import { FC, DOMAttributes } from "react";
 import {
     HStack,
-    StackDivider,
     IconButton,
     Menu,
     MenuButton,
@@ -20,8 +19,8 @@ import { ItemMetadata, ThumbnailButton } from ".";
 type Props = {
     onClick: DOMAttributes<any>["onClick"],
     title: string,
-    subtitleListMobile: string[],
-    subtitleListDesktop: string[],
+    subtitlesMobile: string[],
+    subtitlesDesktop: string[],
     imgThumbnails: string[],
     imgWidth?: LayoutProps["w"],
     isPlaying?: boolean,
@@ -37,8 +36,8 @@ type Props = {
 const SearchItem: FC<Props> = ({
     onClick,
     title,
-    subtitleListMobile,
-    subtitleListDesktop,
+    subtitlesMobile,
+    subtitlesDesktop,
     imgThumbnails,
     imgWidth,
     isPlaying,
@@ -60,7 +59,7 @@ const SearchItem: FC<Props> = ({
             pr={1.5}
             borderRadius="md"
             bg={useColorModeValue(
-                isOpen || isPlaying ? "kaihui.400" : "kaihui.300",
+                isOpen || isPlaying ? "kaihui.500" : "kaihui.400",
                 isOpen || isPlaying ? "kaihui.900" : "kaihui.800"
             )}
             onMouseEnter={onOpen}
@@ -86,14 +85,13 @@ const SearchItem: FC<Props> = ({
                 titleFontSize={["sm", null, "md"]}
                 titleLines={1}
                 titleOnClick={isPlaying || isMobile ? null : onClick}
-                subtitleList={useBreakpointValue([subtitleListMobile, null, subtitleListDesktop])}
-                subtitleFontSize={["xs", null, "sm"]}
-                subtitleLines={1}
-                subtitleSeparator={(
-                    <StackDivider border={0} boxSize={2}>
-                        <StarIcon boxSize={2} mb={[2.5, null, 1]} />
-                    </StackDivider>
-                )}
+                subtitlesList={[useBreakpointValue([subtitlesMobile, null, subtitlesDesktop])]}
+                subtitlesFontSizes={[["xs", null, "sm"]]}
+                subtitlesLines={[1]}
+                subtitlesSeparators={[
+                    <StarIcon boxSize={2} mb={[2.5, null, 1]} />
+                ]}
+                showTooltip={true}
                 flex={1}
             />
 

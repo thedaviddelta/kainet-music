@@ -1,5 +1,5 @@
 import { FC, SyntheticEvent, useEffect, useReducer, useRef, useCallback } from "react";
-import { Image, useToast, BackgroundProps } from "@chakra-ui/react";
+import { Image, useToast, useColorModeValue, BackgroundProps } from "@chakra-ui/react";
 import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
 import { PlayerBar, ItemMetadata, TrackProgress, PlaybackButtons, QueuePopover, VolumeControl } from ".";
@@ -132,6 +132,7 @@ const Player: FC<Props> = (props) => {
         navigator.mediaSession.setActionHandler("seekto", details => setCurrentTime(details.seekTime, true));
     }, [prev, next, setCurrentTime]);
 
+    const selectedColor = useColorModeValue("kaihong.800", "kaihong.500");
     return (
         <>
             <audio
@@ -150,7 +151,8 @@ const Player: FC<Props> = (props) => {
                 itemMetadata={(props) => (
                     <ItemMetadata
                         title={currentTrack?.title ?? "No track"}
-                        subtitleList={[currentTrack?.artist ?? "Unknown"]}
+                        subtitlesList={[[currentTrack?.artist ?? "Unknown"]]}
+                        showTooltip={true}
                         {...props}
                     />
                 )}
@@ -180,9 +182,10 @@ const Player: FC<Props> = (props) => {
                         next={next}
                         isShuffle={isShuffle}
                         toggleShuffle={toggleShuffle}
-                        isNotRepeating={repeatType !== "none"}
+                        isNotRepeating={repeatType === "none"}
                         isRepeatingOne={repeatType === "one"}
                         toggleRepeat={toggleRepeat}
+                        selectedColor={selectedColor}
                         {...props}
                     />
                 )}
@@ -190,6 +193,7 @@ const Player: FC<Props> = (props) => {
                     <QueuePopover
                         remainingQueue={remainingQueue}
                         goTo={goTo}
+                        selectedColor={selectedColor}
                         {...props}
                     />
                 )}

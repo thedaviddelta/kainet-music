@@ -100,7 +100,18 @@ export default extendTheme({
                             bg: transparentize(`${c}.300`, 0.5)(theme)
                         },
                     }
-                }
+                },
+                customSolid: props => ({
+                    color: "#1a1a1a",
+                    bg: `${props.colorScheme}.600`,
+                    _hover: {
+                        bg: mode(`${props.colorScheme}.500`, `${props.colorScheme}.700`)(props)
+                    },
+                    _active: {
+                        bg: mode(`${props.colorScheme}.400`, `${props.colorScheme}.800`)(props)
+                    },
+                    boxShadow: "0 0 0.5rem #1a1a1a"
+                })
             }
         }
     }

@@ -25,6 +25,7 @@ const Layout: FC<Props> = ({ children, ...props }) => (
             top={0}
             bg={useColorModeValue("kaihui.300", "kaihui.900")}
             zIndex={4}
+            boxShadow={useColorModeValue("0 0 0.5rem #a0aec0", "0 0 0.5rem #171923")}
         />
 
         <Flex
@@ -41,6 +42,7 @@ const Layout: FC<Props> = ({ children, ...props }) => (
             bottom={0}
             bg={useColorModeValue("kaihui.300", "kaihui.900")}
             zIndex={5}
+            boxShadow={useColorModeValue("0 0 0.5rem #a0aec0", "0 0 0.5rem #171923")}
         />
     </VStack>
 );

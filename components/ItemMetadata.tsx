@@ -1,16 +1,25 @@
 import { FC, DOMAttributes } from "react";
-import { HStack, VStack, Text, Tooltip, useBreakpointValue, TypographyProps, StackProps } from "@chakra-ui/react";
+import {
+    HStack,
+    VStack,
+    StackDivider,
+    Text,
+    Tooltip,
+    useBreakpointValue,
+    TypographyProps,
+    StackProps
+} from "@chakra-ui/react";
 
 type Props = {
     title: string,
     titleFontSize: TypographyProps["fontSize"],
     titleLines: TypographyProps["noOfLines"],
     titleOnClick?: DOMAttributes<any>["onClick"] | null,
-    subtitleList: string[],
-    subtitleFontSize: TypographyProps["fontSize"],
-    subtitleLines: TypographyProps["noOfLines"],
-    subtitleSeparator?: StackProps["divider"],
-    lineSpacing?: StackProps["spacing"],
+    subtitlesList: string[][],
+    subtitlesFontSizes: TypographyProps["fontSize"][],
+    subtitlesLines: TypographyProps["noOfLines"][],
+    subtitlesSeparators?: StackProps["divider"][],
+    showTooltip?: boolean,
     [key: string]: any
 };
 
@@ -19,16 +28,17 @@ const ItemMetadata: FC<Props> = ({
     titleFontSize,
     titleLines,
     titleOnClick,
-    subtitleList,
-    subtitleFontSize,
-    subtitleLines,
-    subtitleSeparator,
+    subtitlesList,
+    subtitlesFontSizes,
+    subtitlesLines,
+    subtitlesSeparators,
+    showTooltip,
     ...props
 }) => {
     const tooltipOpenDelay = useBreakpointValue([10, null, 300]);
     return (
-        <VStack alignItems="start" spacing={1} {...props}>
-            <Tooltip label={title} placement="top" openDelay={tooltipOpenDelay}>
+        <VStack alignItems="flex-start" spacing={1} {...props}>
+            <Tooltip label={title} placement="top" openDelay={tooltipOpenDelay} isDisabled={!showTooltip}>
                 <Text
                     fontSize={titleFontSize}
                     noOfLines={titleLines}
@@ -41,18 +51,28 @@ const ItemMetadata: FC<Props> = ({
                 </Text>
             </Tooltip>
 
-            <HStack
-                spacing={1.5}
-                divider={subtitleSeparator}
-            >
-                {subtitleList?.map(text => (
-                    <Tooltip key={text} label={text} placement="top" openDelay={tooltipOpenDelay}>
-                        <Text fontSize={subtitleFontSize} noOfLines={subtitleLines} userSelect="none">
-                            {text}
-                        </Text>
-                    </Tooltip>
+            <VStack alignItems="flex-start" spacing={0.5}>
+                {subtitlesList?.map((subtitles, index) => (
+                    <HStack key={index} spacing={1.5} divider={subtitlesSeparators?.[index] && (
+                        <StackDivider border={0} boxSize={2}>
+                            {subtitlesSeparators?.[index]}
+                        </StackDivider>
+                    )}>
+                        {subtitles?.map(text => (
+                            <Tooltip key={text} label={text} placement="top" openDelay={tooltipOpenDelay} isDisabled={!showTooltip}>
+                                <Text
+                                    fontSize={subtitlesFontSizes[index]}
+                                    noOfLines={subtitlesLines[index]}
+                                    textAlign="center"
+                                    userSelect="none"
+                                >
+                                    {text}
+                                </Text>
+                            </Tooltip>
+                        ))}
+                    </HStack>
                 ))}
-            </HStack>
+            </VStack>
         </VStack>
     );
 };

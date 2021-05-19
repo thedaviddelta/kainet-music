@@ -23,8 +23,8 @@ type Props = {
     itemMetadata: (props: {
         titleFontSize: TypographyProps["fontSize"],
         titleLines: TypographyProps["noOfLines"],
-        subtitleFontSize: TypographyProps["fontSize"],
-        subtitleLines: TypographyProps["noOfLines"],
+        subtitlesFontSizes: TypographyProps["fontSize"][],
+        subtitlesLines: TypographyProps["noOfLines"][],
         [key: string]: any
     }) => JSX.Element,
     trackThumbnail: (props: {
@@ -86,8 +86,8 @@ const PlayerBarDesktop: FC<Props> = ({
             {itemMetadata({
                 titleFontSize: "md",
                 titleLines: 2,
-                subtitleFontSize: "sm",
-                subtitleLines: 1
+                subtitlesFontSizes: ["sm"],
+                subtitlesLines: [1]
             })}
         </HStack>
 
@@ -138,8 +138,8 @@ const PlayerBarMobile: FC<Props> = ({
                     {itemMetadata({
                         titleFontSize: "sm",
                         titleLines: 1,
-                        subtitleFontSize: "xs",
-                        subtitleLines: 1
+                        subtitlesFontSizes: ["xs"],
+                        subtitlesLines: [1]
                     })}
                 </HStack>
 
@@ -187,8 +187,8 @@ const PlayerBarMobile: FC<Props> = ({
                                 {itemMetadata({
                                     titleFontSize: "lg",
                                     titleLines: 2,
-                                    subtitleFontSize: "md",
-                                    subtitleLines: 1,
+                                    subtitlesFontSizes: ["md"],
+                                    subtitlesLines: [1],
                                     w: "full",
                                     px: 5,
                                     py: 2

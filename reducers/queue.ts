@@ -62,17 +62,18 @@ export type Action = {
 export default function reducer(state: State, action: Action): State {
     switch (action.type) {
         case ActionType.SET:
-            const queue = [...action.payload.queue];
-            const firstTrack = queue.shift();
+            const initialQueue = [...action.payload.queue];
+            const initialSortedQueue = state.shuffle
+                ? [...initialQueue].sort(() => Math.random() - 0.5)
+                : initialQueue;
+            const firstTrack = initialSortedQueue.shift();
             return {
                 ...state,
                 mainQueue: firstTrack
                     ? [firstTrack]
                     : [],
-                nextQueue: queue,
-                sortedQueue: state.shuffle
-                    ? [...queue].sort(() => Math.random() - 0.5)
-                    : queue,
+                nextQueue: initialQueue.filter(track => track !== firstTrack),
+                sortedQueue: initialSortedQueue,
                 current: 0
             };
         case ActionType.ADD:
