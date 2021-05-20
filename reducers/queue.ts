@@ -59,14 +59,26 @@ export type Action = {
     }
 };
 
+// Durstenfeld shuffle
+const shuffleList = <T>(list: T[]): T[] => {
+    const copy = [...list];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+};
+
 export default function reducer(state: State, action: Action): State {
     switch (action.type) {
         case ActionType.SET:
             const initialQueue = [...action.payload.queue];
+
             const initialSortedQueue = state.shuffle
-                ? [...initialQueue].sort(() => Math.random() - 0.5)
+                ? shuffleList(initialQueue)
                 : initialQueue;
             const firstTrack = initialSortedQueue.shift();
+
             return {
                 ...state,
                 mainQueue: firstTrack
@@ -159,7 +171,7 @@ export default function reducer(state: State, action: Action): State {
             return {
                 ...state,
                 sortedQueue: shuffle
-                    ? [...state.nextQueue].sort(() => Math.random() - 0.5)
+                    ? shuffleList(state.nextQueue)
                     : state.nextQueue,
                 shuffle
             };

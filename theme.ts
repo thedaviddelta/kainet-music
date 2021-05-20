@@ -45,6 +45,7 @@ export default extendTheme({
             700: "#2d3748",
             800: "#1a202c",
             900: "#171923",
+            950: "#0b0c12"
         }
     },
     config: {
@@ -84,7 +85,7 @@ export default extendTheme({
                         },
                     }
                 },
-                customSolid: props => ({
+                cover: props => ({
                     color: "#1a1a1a",
                     bg: `${props.colorScheme}.600`,
                     _hover: {

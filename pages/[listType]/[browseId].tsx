@@ -4,7 +4,7 @@ import { VStack, HStack, Table, Thead, Tbody, Tr, Th, useBreakpointValue } from 
 import { StarIcon, TimeIcon } from "@chakra-ui/icons";
 import { FaPlay } from "react-icons/fa";
 import { getAlbum, getPlaylist, parseDuration, YtMusicAlbum, YtMusicPlaylist, YtMusicTrack } from "kainet-scraper";
-import { ListCoverButton, ItemMetadata, ListTrack } from "@components";
+import { CustomError, ListCoverButton, ItemMetadata, ListTrack } from "@components";
 import { useQueue } from "@contexts/queue";
 
 type Props = {
@@ -16,7 +16,7 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list })
     const isMobile = useBreakpointValue([true, null, false]);
 
     if (!list)
-        return <div>None</div>;
+        return <CustomError errorSubject="list information" />;
 
     return (
         <VStack
@@ -93,7 +93,7 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list })
                             isMobile={isMobile}
                             onClick={() => setQueue([track])}
                             onQueueClick={() => addTrack(track)}
-                            isPlaying={track.id === currentTrack?.id}
+                            isPlaying={currentTrack?.id === track.id || (currentTrack?.title === track.title && currentTrack?.artist === track.artist)}
                         />
                     ))}
                 </Tbody>

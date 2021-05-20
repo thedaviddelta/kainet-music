@@ -4,7 +4,7 @@ import { VStack, MenuItem } from "@chakra-ui/react";
 import { FaPlay, FaPlayCircle, FaEye } from "react-icons/fa";
 import { RiPlayListFill, RiVolumeUpFill } from "react-icons/ri";
 import { search, YtMusicElement, YtMusicArtist } from "kainet-scraper";
-import { SearchItem } from "@components";
+import { CustomError, SearchItem } from "@components";
 import { useQueue } from "@contexts/queue";
 
 type Props = {
@@ -13,6 +13,9 @@ type Props = {
 
 const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results }) => {
     const { setQueue, addTrack, currentTrack } = useQueue();
+
+    if (results.length <= 0)
+        return <CustomError errorSubject="search results" />;
 
     return (
         <VStack
@@ -29,11 +32,11 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results })
                         subtitlesDesktop={
                             item.type === "song"
                                 ? [item.artist, item.album, item.durationText]
-                                : [item.artist, item.views ? `${item.views} views` : "", item.durationText]
+                                : [item.artist, item.views ? `${BigInt(item.views).toLocaleString("en")} views` : "", item.durationText]
                         }
                         imgThumbnails={item.thumbnails}
                         imgWidth={item.type === "song" ? null : [28, null, "8.85rem"]}
-                        isPlaying={currentTrack?.id === item.id}
+                        isPlaying={currentTrack?.id === item.id || (currentTrack?.title === item.title && currentTrack?.artist === item.artist)}
                         label={`Play ${item.type}`}
                         playingLabel={`Playing ${item.type}`}
                         icon={<FaPlay />}

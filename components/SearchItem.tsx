@@ -64,7 +64,7 @@ const SearchItem: FC<Props> = ({
             borderRadius="md"
             bg={useColorModeValue(
                 isOpen || isPlaying ? "kaihui.500" : "kaihui.400",
-                isOpen || isPlaying ? "kaihui.900" : "kaihui.800"
+                isOpen || isPlaying ? "kaihui.950" : "kaihui.800"
             )}
             onMouseEnter={onOpen}
             onMouseLeave={onClose}

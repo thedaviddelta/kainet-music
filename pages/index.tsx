@@ -3,7 +3,7 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { VStack, Wrap, WrapItem, Text, useBreakpointValue } from "@chakra-ui/react";
 import { FaEye } from "react-icons/fa";
 import { retrieveSuggestions, YtMusicPlaylist } from "kainet-scraper";
-import { ListCoverButton } from "@components";
+import { CustomError, ListCoverButton } from "@components";
 
 type Props = {
     suggestions: YtMusicPlaylist[]
@@ -13,12 +13,15 @@ const Home: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ suggestions 
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
     const isMobile = useBreakpointValue([true, null, false]);
 
+    if (suggestions.length <= 0)
+        return <CustomError errorSubject="suggestions" />;
+
     return (
         <Wrap
             justify="center"
             maxW={["87.5vw", null, "82.5vw"]}
             spacing={[5, null, 10]}
-            my={3.5}
+            my={[3.5, null, 4]}
         >
             {suggestions.map((list, index) => (
                 <WrapItem key={index + list.id}>

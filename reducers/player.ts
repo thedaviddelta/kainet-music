@@ -2,7 +2,7 @@ type State = {
     playback: "playing" | "paused" | "none",
     duration: number,
     currentTime: number,
-    timeUpdated: boolean,
+    timeAltered: boolean,
     sourceUrl: string,
     volume: number
 };
@@ -11,7 +11,7 @@ export const initialState: State = {
     playback: "none",
     duration: 0,
     currentTime: 0,
-    timeUpdated: false,
+    timeAltered: false,
     sourceUrl: "",
     volume: 100
 };
@@ -67,7 +67,7 @@ export default function reducer(state: State, action: Action): State {
             return { ...state, sourceUrl: "", duration: 0, currentTime: 0, playback: "none" };
         case ActionType.TIME_UPDATE:
             const { time, manual } = action.payload;
-            return { ...state, currentTime: time, timeUpdated: manual || state.timeUpdated };
+            return { ...state, currentTime: time, timeAltered: manual || state.timeAltered };
         default:
             return state;
     }

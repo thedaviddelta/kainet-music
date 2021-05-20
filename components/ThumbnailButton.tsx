@@ -1,5 +1,5 @@
 import { FC } from "react";
-import {Box, Image, IconButton, LayoutProps, IconButtonProps, Text} from "@chakra-ui/react";
+import { Box, Image, IconButton, LayoutProps, IconButtonProps } from "@chakra-ui/react";
 import { LocalLink } from ".";
 
 type Props = ({
@@ -37,6 +37,7 @@ const ThumbnailButton: FC<Props> = ({
 }) => (
     <Box
         position="relative"
+        w={width ?? height}
         minW={width ?? height}
         maxW={width ?? height}
         h={height}

@@ -24,6 +24,7 @@ type Props = {
 const Header: FC<Props> = (props) => {
     const { isOpen, onToggle } = useDisclosure();
     const isMobile = useBreakpointValue([true, null, false]);
+
     return (
         <HStack
             w="full"
@@ -31,25 +32,21 @@ const Header: FC<Props> = (props) => {
             px={[6, null, null, 10]}
             {...props}
         >
-            {(!isMobile || !isOpen) && (
-                <Box flex={1}>
-                    <LocalLink href="/" display="flex" w="fit-content">
-                        <NextImage
-                            src="/favicon.svg"
-                            alt="Logo"
-                            layout="fixed"
-                            width={56}
-                            height={56}
-                        />
-                    </LocalLink>
-                </Box>
-            )}
+            <Box flex={1} display={!isMobile || !isOpen ? null : "none"}>
+                <LocalLink href="/" display="flex" w="fit-content">
+                    <NextImage
+                        src="/favicon.svg"
+                        alt="Logo"
+                        layout="fixed"
+                        width={56}
+                        height={56}
+                    />
+                </LocalLink>
+            </Box>
 
-            {(!isMobile || isOpen) && (
-                <Box flex={1}>
-                    <SearchBar />
-                </Box>
-            )}
+            <Box flex={1} display={!isMobile || isOpen ? null : "none"}>
+                <SearchBar />
+            </Box>
 
             {isMobile && (
                 <IconButton

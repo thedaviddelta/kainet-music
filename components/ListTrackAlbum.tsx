@@ -1,5 +1,5 @@
 import { FC, DOMAttributes, } from "react";
-import { Icon, IconButton, Td } from "@chakra-ui/react";
+import { Box, Icon, IconButton, Td } from "@chakra-ui/react";
 import { FaPlay } from "react-icons/fa";
 import { RiVolumeUpFill } from "react-icons/ri";
 
@@ -22,25 +22,27 @@ const ListTrackAlbum: FC<Props> = ({
 }) => (
     <>
         <Td isNumeric={true}>
-            {isOpen || isPlaying ? (
-                <IconButton
-                    aria-label={`${playLabel} '${title}'`}
-                    icon={<Icon as={isPlaying ? RiVolumeUpFill: FaPlay} />}
-                    onClick={onClick}
-                    disabled={isPlaying}
-                    _disabled={{ color: "currentColor", cursor: "not-allowed" }}
-                    variant="unstyled"
-                    colorScheme="kaihui"
-                    size="xs"
-                    w="fit-content"
-                    h="fit-content"
-                    minW={0}
-                    minH={0}
-                    lineHeight={0}
-                />
-            ) : (
-                <>{index}</>
-            )}
+            <Box w={6} ms="auto">
+                {isOpen || isPlaying ? (
+                    <IconButton
+                        aria-label={`${playLabel} '${title}'`}
+                        icon={<Icon as={isPlaying ? RiVolumeUpFill: FaPlay} />}
+                        onClick={onClick}
+                        disabled={isPlaying}
+                        _disabled={{ color: "currentColor", cursor: "not-allowed" }}
+                        variant="unstyled"
+                        colorScheme="kaihui"
+                        size="xs"
+                        w="fit-content"
+                        h="fit-content"
+                        minW={0}
+                        minH={0}
+                        lineHeight={0}
+                    />
+                ) : (
+                    <>{index}</>
+                )}
+            </Box>
         </Td>
 
         <Td
