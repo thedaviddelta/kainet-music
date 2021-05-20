@@ -116,6 +116,7 @@ const SearchItem: FC<Props> = ({
                         as={href ? LocalLink : null}
                         onClick={onClick}
                         href={href}
+                        prefetch={href ? false : null}
                         boxShadow="none !important"
                         textDecoration="none !important"
                         isDisabled={isPlaying}

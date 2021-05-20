@@ -55,6 +55,7 @@ const ListCoverButton: FC<Props> = ({
                     as={href ? LocalLink : null}
                     onClick={onClick}
                     href={href}
+                    prefetch={href ? false : null}
                     variant="customSolid"
                     colorScheme="kaihong"
                     size={btnSizeFinal}

@@ -52,6 +52,7 @@ const ItemMetadata: FC<Props> = ({
                     as={titleHref ? LocalLink : null}
                     onClick={titleOnClick}
                     href={titleHref}
+                    prefetch={titleHref ? false : null}
                     boxShadow="none !important"
                     textDecoration="none !important"
                     _hover={{ cursor: titleOnClick || titleHref ? "pointer" : titleOnClick === null ? "not-allowed" : "initial" }}
@@ -73,7 +74,7 @@ const ItemMetadata: FC<Props> = ({
                                 <Text
                                     fontSize={subtitlesFontSizes[index]}
                                     noOfLines={subtitlesLines[index]}
-                                    textAlign="center"
+                                    textAlign={subtitlesLines[index] > 1 ? "center" : "start"}
                                     userSelect="none"
                                 >
                                     {text}

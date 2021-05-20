@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Image, IconButton, LayoutProps, IconButtonProps } from "@chakra-ui/react";
+import {Box, Image, IconButton, LayoutProps, IconButtonProps, Text} from "@chakra-ui/react";
 import { LocalLink } from ".";
 
 type Props = ({
@@ -59,6 +59,7 @@ const ThumbnailButton: FC<Props> = ({
                 as={href ? LocalLink : null}
                 onClick={onClick}
                 href={href}
+                prefetch={href ? false : null}
                 variant="thumbnail"
                 colorScheme="kaihui"
                 size={btnSize}

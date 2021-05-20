@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
     HStack,
     VStack,
+    Button,
     IconButton,
     Popover,
     PopoverTrigger,
@@ -36,6 +37,11 @@ const QueuePopover: FC<Props> = ({
     ...props
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [showFullQueue, setShowFullQueue] = useState(false);
+    const finalQueue = remainingQueue.length > 20 && !showFullQueue
+        ? remainingQueue.slice(0, 20)
+        : remainingQueue;
+
     return (
         <Popover
             closeOnBlur={false}
@@ -66,7 +72,7 @@ const QueuePopover: FC<Props> = ({
                         </Text>
                     ) : (
                         <VStack mb={2}>
-                            {remainingQueue.map((track, index) => (
+                            {finalQueue.map((track, index) => (
                                 <HStack key={track.id} w="full">
                                     <Text size="sm" minW={5} align="right">
                                         {index + 1}
@@ -92,6 +98,15 @@ const QueuePopover: FC<Props> = ({
                                     />
                                 </HStack>
                             ))}
+                            {remainingQueue.length > 20 && (
+                                <Button
+                                    onClick={() => setShowFullQueue(current => !current)}
+                                    variant="outline"
+                                    w={44}
+                                >
+                                    {showFullQueue ? "See less" : "See all"}
+                                </Button>
+                            )}
                         </VStack>
                     )}
                 </PopoverBody>
