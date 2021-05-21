@@ -62,7 +62,7 @@ export default function reducer(state: State, action: Action): State {
             return { ...state, playback: "paused" };
         case ActionType.SETUP:
             const { sourceUrl, duration } = action.payload;
-            return { ...state, sourceUrl, duration, currentTime: 0, playback: "playing" };
+            return { ...state, sourceUrl, duration, currentTime: 0 };
         case ActionType.STOP:
             return { ...state, sourceUrl: "", duration: 0, currentTime: 0, playback: "none" };
         case ActionType.TIME_UPDATE:

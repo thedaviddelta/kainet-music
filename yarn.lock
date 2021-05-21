@@ -1255,13 +1255,6 @@ axe-core@^4.0.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.2.0.tgz#6594db4ee62f78be79e32a7295d21b099b60668d"
   integrity sha512-1uIESzroqpaTzt9uX48HO+6gfnKu3RwvWdCcWSrX4csMInJfCo1yvKPNXCwXFRpJqRW25tiASb6No0YH57PXqg==
 
-axios-retry@^3.1.9:
-  version "3.1.9"
-  resolved "https://registry.yarnpkg.com/axios-retry/-/axios-retry-3.1.9.tgz#6c30fc9aeb4519aebaec758b90ef56fa03fe72e8"
-  integrity sha512-NFCoNIHq8lYkJa6ku4m+V1837TP6lCa7n79Iuf8/AqATAHYB0ISaAS1eyIenDOfHOLtym34W65Sjke2xjg2fsA==
-  dependencies:
-    is-retry-allowed "^1.1.0"
-
 axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
@@ -2663,11 +2656,6 @@ is-regex@^1.1.2:
     call-bind "^1.0.2"
     has-symbols "^1.0.1"
 
-is-retry-allowed@^1.1.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-1.2.0.tgz#d778488bd0a4666a3be8a1482b9f2baafedea8b4"
-  integrity sha512-RUbUeKwvm3XG2VYamhJL1xFktgjvPzL0Hq8C+6yrWIswDy3BIXGqCxhxkc30N9jqK311gVU137K8Ei55/zVJRg==
-
 is-string@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/is-string/-/is-string-1.0.5.tgz#40493ed198ef3ff477b8c7f92f644ec82a5cd3a6"
@@ -2763,13 +2751,12 @@ json5@^1.0.1:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-kainet-scraper@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/kainet-scraper/-/kainet-scraper-1.2.0.tgz#dbe6c29fa4e76d8361c0852fd75c2320f7d8cb5d"
-  integrity sha512-Ca0wXksooVG1c8Go6MY4kTWrD+OCTuuOP+6wrnPde7A/wzEDzNfO/Hl42T+1PKESuJaI6zm6DOSsAz+BXJnIsw==
+kainet-scraper@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/kainet-scraper/-/kainet-scraper-1.2.1.tgz#6c8ddb8ddb32da408da01e56ce88232d7821d50b"
+  integrity sha512-1rCwsGypGcbBNJufPQCXDtbtWWZefkTnUvG479EAMyuULW5IMcjchVaLWXG4kiSBmXSJA5/XdsKDQgtI29b1ZA==
   dependencies:
     axios "^0.21.1"
-    axios-retry "^3.1.9"
     user-agents "^1.0.622"
 
 language-subtag-registry@~0.3.2:

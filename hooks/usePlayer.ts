@@ -17,6 +17,7 @@ const usePlayer = () => {
     const {
         remainingQueue,
         currentTrack,
+        isTrackAlone,
         canPrev,
         prevTrack,
         nextTrack,
@@ -32,18 +33,6 @@ const usePlayer = () => {
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const toast = useToast();
-
-    const play = useCallback(() => (
-        dispatch({ type: ActionType.PLAY })
-    ), []);
-
-    const pause = useCallback(() => (
-        dispatch({ type: ActionType.PAUSE })
-    ), []);
-
-    const stop = useCallback(() => (
-        dispatch({ type: ActionType.STOP })
-    ), []);
 
     const togglePlay = useCallback(() => (
         dispatch({ type: playback === "playing" ? ActionType.PAUSE : ActionType.PLAY })
@@ -68,49 +57,69 @@ const usePlayer = () => {
         setCurrentTime(0, true);
     }, [nextTrack, setCurrentTime]);
 
-    useEffect(() => {
-        if (!currentTrack)
-            return stop();
-
-        pause();
-        const controller = new AbortController();
-
-        fetch(`/api/source?id=${currentTrack.id}`, {
-            signal: controller.signal
+    const updateSource = useCallback((
+        id: string,
+        signal: AbortSignal,
+        retry: number = 0
+    ) => {
+        fetch(`/api/source?id=${id}`, {
+            cache: retry > 0 ? "reload" : "default",
+            signal
         }).then(res => {
             if (!res.ok)
                 throw new Error(`${res.status} - ${res.statusText}`);
             return res.json();
-        }).then(json => {
+        }).then(async json => {
             const { url, duration } = json;
             dispatch({ type: ActionType.SETUP, payload: { sourceUrl: url, duration } });
+
+            await audioRef.current?.play();
+            dispatch({ type: ActionType.PLAY });
         }).catch(err => {
-            stop();
-            if (err.name !== "AbortError")
-                toast({
-                    title: "Unexpected error",
-                    description: "An error occurred while retrieving the track information",
-                    status: "error",
-                    duration: 3500
-                });
+            if (err.name === "AbortError")
+                return;
+            if (retry >= 0 && retry < 3)
+                return updateSource(id, signal, retry + 1);
+
+            dispatch({ type: ActionType.STOP });
+            toast({
+                title: "Unexpected error",
+                description: "An error occurred while retrieving the track information",
+                status: "error",
+                duration: 3500
+            });
         });
+    }, [toast]);
+
+    useEffect(() => {
+        if (!currentTrack)
+            return dispatch({ type: ActionType.STOP });
+
+        dispatch({ type: ActionType.PAUSE });
+        const controller = new AbortController();
+
+        updateSource(currentTrack.id, controller.signal);
 
         return () => {
             controller?.abort();
         };
-    }, [currentTrack, pause, stop, toast]);
+    }, [currentTrack, updateSource]);
 
     useEffect(() => {
         if (!audioRef.current)
             return;
+
         playback === "playing"
             ? audioRef.current.play()
             : audioRef.current.pause();
+    }, [playback]);
 
-        if (!navigator.mediaSession || !currentTrack)
+    useEffect(() => {
+        if (!navigator.mediaSession)
             return;
+
         navigator.mediaSession.playbackState = playback;
-        navigator.mediaSession.metadata = playback === "none"
+        navigator.mediaSession.metadata = playback === "none" || !currentTrack
             ? null
             : new MediaMetadata({
                 title: currentTrack.title,
@@ -145,22 +154,21 @@ const usePlayer = () => {
     useEffect(() => {
         if (!navigator.mediaSession)
             return;
-        navigator.mediaSession.setActionHandler("play", play);
-        navigator.mediaSession.setActionHandler("pause", pause);
-        navigator.mediaSession.setActionHandler("stop", stop);
+        navigator.mediaSession.setActionHandler("play", () => dispatch({ type: ActionType.PLAY }));
+        navigator.mediaSession.setActionHandler("pause", () => dispatch({ type: ActionType.PAUSE }));
+        navigator.mediaSession.setActionHandler("stop", () => dispatch({ type: ActionType.STOP }));
         navigator.mediaSession.setActionHandler("previoustrack", prev);
         navigator.mediaSession.setActionHandler("nexttrack", next);
         navigator.mediaSession.setActionHandler("seekto", details => setCurrentTime(details.seekTime, true));
-    }, [play, pause, stop, prev, next, setCurrentTime]);
+    }, [prev, next, setCurrentTime]);
 
     return {
         audioRef,
         sourceUrl,
         currentTrack,
+        isTrackAlone,
         isPlaybackEmpty: playback === "none",
         isPlaying: playback === "playing",
-        play,
-        pause,
         togglePlay,
         currentTime,
         duration,
@@ -173,6 +181,7 @@ const usePlayer = () => {
         isShuffle,
         toggleShuffle,
         isNotRepeating: repeatType === "none",
+        isRepeatingAll: repeatType === "all",
         isRepeatingOne: repeatType === "one",
         toggleRepeat,
         remainingQueue,

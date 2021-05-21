@@ -13,10 +13,9 @@ const Player: FC<Props> = (props) => {
         audioRef,
         sourceUrl,
         currentTrack,
+        isTrackAlone,
         isPlaybackEmpty,
         isPlaying,
-        play,
-        pause,
         togglePlay,
         currentTime,
         duration,
@@ -29,6 +28,7 @@ const Player: FC<Props> = (props) => {
         isShuffle,
         toggleShuffle,
         isNotRepeating,
+        isRepeatingAll,
         isRepeatingOne,
         toggleRepeat,
         remainingQueue,
@@ -41,10 +41,8 @@ const Player: FC<Props> = (props) => {
             <audio
                 ref={audioRef}
                 src={sourceUrl}
-                onPlay={play}
-                onPause={pause}
                 onEnded={next}
-                loop={isRepeatingOne}
+                loop={isRepeatingOne || (isRepeatingAll && isTrackAlone)}
                 onTimeUpdate={(e: SyntheticEvent<HTMLAudioElement> & { target: HTMLAudioElement }) => (
                     setCurrentTime(e.target.currentTime)
                 )}
