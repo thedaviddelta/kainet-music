@@ -1,4 +1,5 @@
 import { createContext, Dispatch, FC, useContext, useReducer, useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
 import { YtMusicTrack } from "kainet-scraper";
 import reducer, { Action, ActionType, initialState, RepeatType } from "@reducers/queue";
 
@@ -34,6 +35,8 @@ export const useQueue = () => {
     const [state, dispatch] = useContext(QueueContext);
     const { mainQueue, sortedQueue, current, shuffle, repeat } = state;
 
+    const toast = useToast();
+
     useEffect(() => {
         localStorage.setItem("shuffle", shuffle.toString());
     }, [shuffle]);
@@ -49,11 +52,17 @@ export const useQueue = () => {
         canPrev: (repeat !== RepeatType.NONE || current > 0) && (mainQueue.length > 0 || sortedQueue.length > 0),
         isShuffle: shuffle,
         repeatType: RepeatType[repeat].toLocaleLowerCase() as Lowercase<keyof typeof RepeatType>,
-        setQueue(queue: YtMusicTrack[]) {
-            dispatch({ type: ActionType.SET, payload: { queue } });
+        setQueue(queue: YtMusicTrack[], keepFirst?: boolean) {
+            dispatch({ type: ActionType.SET, payload: { queue, keepFirst } });
         },
         addTrack(song: YtMusicTrack) {
             dispatch({ type: ActionType.ADD, payload: { track: song } });
+            toast({
+                title: "Added to queue",
+                description: "Track successfully added to the queue",
+                status: "success",
+                duration: 1250
+            });
         },
         prevTrack() {
             dispatch({ type: ActionType.PREV });

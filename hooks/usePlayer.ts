@@ -73,6 +73,12 @@ const usePlayer = () => {
             const { url, duration } = json;
             dispatch({ type: ActionType.SETUP, payload: { sourceUrl: url, duration } });
 
+            if ("mediaSession" in navigator)
+                navigator.mediaSession?.setPositionState({
+                    duration,
+                    position: 0
+                });
+
             await audioRef.current?.play();
             dispatch({ type: ActionType.PLAY });
         }).catch(err => {
@@ -115,7 +121,7 @@ const usePlayer = () => {
     }, [playback]);
 
     useEffect(() => {
-        if (!navigator.mediaSession)
+        if (!("mediaSession" in navigator) || !navigator.mediaSession)
             return;
 
         navigator.mediaSession.playbackState = playback;
@@ -139,10 +145,12 @@ const usePlayer = () => {
             return;
         audioRef.current.currentTime = currentTime;
         dispatch({ type: ActionType.SET_FIELD, payload: { key: "timeAltered", value: false } });
-        navigator.mediaSession?.setPositionState({
-            duration,
-            position: currentTime
-        });
+
+        if ("mediaSession" in navigator)
+            navigator.mediaSession?.setPositionState({
+                duration,
+                position: currentTime
+            });
     }, [currentTime, duration, timeAltered]);
 
     useEffect(() => {
@@ -152,8 +160,9 @@ const usePlayer = () => {
     }, [volume]);
 
     useEffect(() => {
-        if (!navigator.mediaSession)
+        if (!("mediaSession" in navigator) || !navigator.mediaSession)
             return;
+
         navigator.mediaSession.setActionHandler("play", () => dispatch({ type: ActionType.PLAY }));
         navigator.mediaSession.setActionHandler("pause", () => dispatch({ type: ActionType.PAUSE }));
         navigator.mediaSession.setActionHandler("stop", () => dispatch({ type: ActionType.STOP }));

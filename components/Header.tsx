@@ -27,6 +27,7 @@ const Header: FC<Props> = (props) => {
 
     return (
         <HStack
+            as="header"
             w="full"
             h="4.5rem"
             px={[6, null, null, 10]}

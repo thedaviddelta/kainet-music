@@ -37,7 +37,8 @@ export enum ActionType {
 export type Action = {
     type: ActionType.SET,
     payload: {
-        queue: YtMusicTrack[]
+        queue: YtMusicTrack[],
+        keepFirst?: boolean
     }
 } | {
     type: ActionType.ADD,
@@ -74,16 +75,26 @@ export default function reducer(state: State, action: Action): State {
         case ActionType.SET:
             const initialQueue = [...action.payload.queue];
 
-            const initialSortedQueue = state.shuffle
-                ? shuffleList(initialQueue)
-                : initialQueue;
+            if (!state.shuffle || action.payload.keepFirst) {
+                const firstTrack = initialQueue.shift();
+                const initialSortedQueue = state.shuffle
+                    ? shuffleList(initialQueue)
+                    : initialQueue;
+
+                return {
+                    ...state,
+                    mainQueue: firstTrack ? [firstTrack] : [],
+                    nextQueue: initialQueue,
+                    sortedQueue: initialSortedQueue
+                };
+            }
+
+            const initialSortedQueue = shuffleList(initialQueue);
             const firstTrack = initialSortedQueue.shift();
 
             return {
                 ...state,
-                mainQueue: firstTrack
-                    ? [firstTrack]
-                    : [],
+                mainQueue: firstTrack ? [firstTrack] : [],
                 nextQueue: initialQueue.filter(track => track !== firstTrack),
                 sortedQueue: initialSortedQueue,
                 current: 0
