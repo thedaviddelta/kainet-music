@@ -6,7 +6,9 @@
     "dev": "next dev",
     "debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest",
+    "renew-mock-data": "ts-node --skip-project mocks/renewData.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.12",
@@ -23,6 +25,10 @@
     "ytdl-core": "^4.5.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.13.0",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.1.9",
+    "@types/jest": "^26.0.23",
     "@types/node": "^15.0.1",
     "@types/react": "^17.0.4",
     "@types/wicg-mediasession": "^1.1.0",
@@ -33,14 +39,23 @@
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^24.0.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
+    "eslint-plugin-testing-library": "^3.9.0",
+    "jest": "^27.0.4",
     "typescript": "^4.2.4"
   },
   "eslintConfig": {
     "extends": [
-      "react-app"
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "next/babel"
     ]
   }
 }

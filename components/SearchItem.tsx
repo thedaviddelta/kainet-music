@@ -101,7 +101,7 @@ const SearchItem: FC<Props> = ({
                 flex={1}
             />
 
-            <Menu>
+            <Menu strategy="fixed">
                 <MenuButton
                     as={IconButton}
                     aria-label="More options"

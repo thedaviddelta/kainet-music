@@ -74,7 +74,7 @@ const Header: FC<Props> = (props) => {
                         variant="outline"
                         colorScheme="kaihui"
                     />
-                    <Menu>
+                    <Menu strategy="fixed">
                         <MenuButton
                             as={Button}
                             px={1.5}

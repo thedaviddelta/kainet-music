@@ -85,7 +85,8 @@ export default function reducer(state: State, action: Action): State {
                     ...state,
                     mainQueue: firstTrack ? [firstTrack] : [],
                     nextQueue: initialQueue,
-                    sortedQueue: initialSortedQueue
+                    sortedQueue: initialSortedQueue,
+                    current: 0
                 };
             }
 

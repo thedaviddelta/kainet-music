@@ -61,7 +61,7 @@ const ListTrack: FC<Props> = ({
             </Td>
 
             <Td p={0.5}>
-                <Menu>
+                <Menu strategy="fixed">
                     <MenuButton
                         as={IconButton}
                         aria-label="More options"
