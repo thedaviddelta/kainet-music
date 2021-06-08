@@ -31,7 +31,8 @@ export enum ActionType {
     NEXT,
     TOGGLE_SHUFFLE,
     TOGGLE_REPEAT,
-    GOTO
+    GOTO,
+    RESET
 }
 
 export type Action = {
@@ -58,6 +59,8 @@ export type Action = {
     payload: {
         track: YtMusicTrack
     }
+} | {
+    type: ActionType.RESET
 };
 
 // Durstenfeld shuffle
@@ -220,6 +223,8 @@ export default function reducer(state: State, action: Action): State {
                 nextQueue: state.nextQueue.filter(track => !finalSortedQueue.includes(track)),
                 sortedQueue: finalSortedQueue
             };
+        case ActionType.RESET:
+            return { ...initialState };
         default:
             return state;
     }

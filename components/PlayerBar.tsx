@@ -55,7 +55,7 @@ type Props = {
 };
 
 const PlayerBar: FC<Props> = (props) => {
-    const Bar = useBreakpointValue([PlayerBarMobile, null, PlayerBarDesktop]) ?? PlayerBarFallback;
+    const Bar = useBreakpointValue([PlayerBarMobile, null, PlayerBarDesktop]) ?? PlayerBarDesktop;
     return <Bar {...props} />;
 };
 
@@ -221,5 +221,3 @@ const PlayerBarMobile: FC<Props> = ({
         </>
     );
 };
-
-const PlayerBarFallback: FC<Props> = () => <div />;

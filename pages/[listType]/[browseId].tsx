@@ -91,7 +91,7 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list })
                             isAlbum={list.type === "album"}
                             index={i + 1}
                             isMobile={isMobile}
-                            onClick={() => setQueue(list.tracks.slice(i), true)}
+                            onClick={() => setQueue([...list.tracks.slice(i), ...list.tracks.slice(0, i)], true)}
                             onQueueClick={() => addTrack(track)}
                             isPlaying={currentTrack?.id === track.id || (currentTrack?.title === track.title && currentTrack?.artist === track.artist)}
                         />

@@ -78,6 +78,9 @@ export const useQueue = () => {
         },
         goTo(song: YtMusicTrack) {
             dispatch({ type: ActionType.GOTO, payload: { track: song } });
+        },
+        reset() {
+            dispatch({ type: ActionType.RESET });
         }
     };
 };

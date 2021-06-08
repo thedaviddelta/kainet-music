@@ -33,7 +33,18 @@ const Providers: FC = ({ children }) => (
 const customRender = (
     ui: ReactElement,
     options?: Omit<RenderOptions, "queries">
-) => render(ui, { wrapper: Providers, ...options });
+) => render(ui, {
+    ...options,
+    wrapper: !options?.wrapper
+        ? Providers
+        : ({ children }) => (
+            <Providers>
+                <options.wrapper>
+                    {children}
+                </options.wrapper>
+            </Providers>
+        )
+});
 
 export * from "@testing-library/react";
 export { customRender as render };
