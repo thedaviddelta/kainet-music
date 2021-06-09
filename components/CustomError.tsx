@@ -4,6 +4,7 @@ import { VStack, HStack, Spacer, Icon, IconButton, Heading } from "@chakra-ui/re
 import { FaRedo } from "react-icons/fa";
 import { RiVolumeMuteFill } from "react-icons/ri";
 import { FallbackProps } from "react-error-boundary";
+import { CustomHead } from ".";
 
 type Props = {
     statusCode: number,
@@ -26,6 +27,8 @@ const CustomError: FC<Props> = (props) => {
         >
             {"statusCode" in props ? (
                 <>
+                    <CustomHead customTitle={`${props.statusCode} - ${props.statusText}`} robots={false} />
+
                     <HStack spacing={6}>
                         <Heading as="h2" size="4xl">
                             {props.statusCode}
@@ -43,6 +46,8 @@ const CustomError: FC<Props> = (props) => {
 
                     {"errorSubject" in props ? (
                         <>
+                            <CustomHead customTitle={`Couldn't load ${props.errorSubject}`} robots={false} />
+
                             <Heading as="h2" size="2xl">
                                 Couldn't load {props.errorSubject}
                             </Heading>
@@ -52,6 +57,8 @@ const CustomError: FC<Props> = (props) => {
                         </>
                     ) : (
                         <>
+                            <CustomHead customTitle="Unexpected error" robots={false} />
+
                             <Heading as="h2" size="2xl">
                                 Unexpected error
                             </Heading>

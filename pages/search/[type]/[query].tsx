@@ -4,7 +4,7 @@ import { VStack, MenuItem } from "@chakra-ui/react";
 import { FaPlay, FaPlayCircle, FaEye } from "react-icons/fa";
 import { RiPlayListFill, RiVolumeUpFill } from "react-icons/ri";
 import { search, YtMusicElement, YtMusicArtist } from "kainet-scraper";
-import { CustomError, SearchItem } from "@components";
+import { CustomError, CustomHead, SearchItem } from "@components";
 import { useQueue } from "@contexts/queue";
 
 type Props = {
@@ -18,58 +18,62 @@ const Search: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ results })
         return <CustomError errorSubject="search results" />;
 
     return (
-        <VStack
-            w={["82.5vw", "75vw", "66vw", "52.5vw"]}
-            align="flex-start"
-        >
-            {results.map(item => (
-                item.type === "song" || item.type === "video" ? (
-                    <SearchItem
-                        key={item.id}
-                        onClick={() => setQueue([item])}
-                        title={item.title}
-                        subtitlesMobile={[item.artist, item.durationText]}
-                        subtitlesDesktop={
-                            item.type === "song"
-                                ? [item.artist, item.album, item.durationText]
-                                : [item.artist, item.views ? `${BigInt(item.views).toLocaleString("en")} views` : "", item.durationText]
-                        }
-                        imgThumbnails={item.thumbnails}
-                        imgWidth={item.type === "song" ? null : [28, null, "8.85rem"]}
-                        isPlaying={currentTrack?.id === item.id || (currentTrack?.title === item.title && currentTrack?.artist === item.artist)}
-                        label={`Play ${item.type}`}
-                        playingLabel={`Playing ${item.type}`}
-                        icon={<FaPlay />}
-                        playingIcon={<RiVolumeUpFill />}
-                        mainActionIcon={<FaPlayCircle />}
-                        extraMenuActions={(
-                            <MenuItem icon={<RiPlayListFill />} onClick={() => addTrack(item)}>
-                                Add to queue
-                            </MenuItem>
-                        )}
-                    />
-                ) : item.type === "album" || item.type === "playlist" ? (
-                    <SearchItem
-                        key={item.id}
-                        href={`/${item.type}/${encodeURIComponent(item.browseId)}`}
-                        title={item.title}
-                        subtitlesMobile={
-                            item.type === "album"
-                                ? [item.artist, item.year]
-                                : [item.trackCount ? `${item.trackCount} songs` : ""]
-                        }
-                        subtitlesDesktop={
-                            item.type === "album"
-                                ? [item.artist, item.year]
-                                : [item.trackCount ? `${item.trackCount} songs` : ""]
-                        }
-                        imgThumbnails={item.thumbnails}
-                        label={`Open ${item.type}`}
-                        icon={<FaEye />}
-                    />
-                ) : null
-            ))}
-        </VStack>
+        <>
+            <CustomHead />
+
+            <VStack
+                w={["82.5vw", "75vw", "66vw", "52.5vw"]}
+                align="flex-start"
+            >
+                {results.map(item => (
+                    item.type === "song" || item.type === "video" ? (
+                        <SearchItem
+                            key={item.id}
+                            onClick={() => setQueue([item])}
+                            title={item.title}
+                            subtitlesMobile={[item.artist, item.durationText]}
+                            subtitlesDesktop={
+                                item.type === "song"
+                                    ? [item.artist, item.album, item.durationText]
+                                    : [item.artist, item.views ? `${BigInt(item.views).toLocaleString("en")} views` : "", item.durationText]
+                            }
+                            imgThumbnails={item.thumbnails}
+                            imgWidth={item.type === "song" ? null : [28, null, "8.85rem"]}
+                            isPlaying={currentTrack?.id === item.id || (currentTrack?.title === item.title && currentTrack?.artist === item.artist)}
+                            label={`Play ${item.type}`}
+                            playingLabel={`Playing ${item.type}`}
+                            icon={<FaPlay />}
+                            playingIcon={<RiVolumeUpFill />}
+                            mainActionIcon={<FaPlayCircle />}
+                            extraMenuActions={(
+                                <MenuItem icon={<RiPlayListFill />} onClick={() => addTrack(item)}>
+                                    Add to queue
+                                </MenuItem>
+                            )}
+                        />
+                    ) : item.type === "album" || item.type === "playlist" ? (
+                        <SearchItem
+                            key={item.id}
+                            href={`/${item.type}/${encodeURIComponent(item.browseId)}`}
+                            title={item.title}
+                            subtitlesMobile={
+                                item.type === "album"
+                                    ? [item.artist, item.year]
+                                    : [item.trackCount ? `${item.trackCount} songs` : ""]
+                            }
+                            subtitlesDesktop={
+                                item.type === "album"
+                                    ? [item.artist, item.year]
+                                    : [item.trackCount ? `${item.trackCount} songs` : ""]
+                            }
+                            imgThumbnails={item.thumbnails}
+                            label={`Open ${item.type}`}
+                            icon={<FaEye />}
+                        />
+                    ) : null
+                ))}
+            </VStack>
+        </>
     );
 };
 
