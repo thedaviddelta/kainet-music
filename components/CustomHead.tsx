@@ -1,6 +1,8 @@
 import { FC } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useColorModeValue } from "@chakra-ui/react";
+import theme from "@theme";
 
 type Props = {
     customTitle?: string,
@@ -21,6 +23,8 @@ const CustomHead: FC<Props> = ({ customTitle, robots = true }) => {
     const router = useRouter();
     const fullUrl = url + router.asPath;
 
+    const themeColor = useColorModeValue(theme.colors.kaihui["300"], theme.colors.kaihui["900"]);
+
     return (
         <Head>
             <title>{fullTitle}</title>
@@ -30,6 +34,10 @@ const CustomHead: FC<Props> = ({ customTitle, robots = true }) => {
 
             <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
             <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+            <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+            <link rel="manifest" href="/manifest.json" />
+            <meta name="theme-color" content={themeColor} />
 
             <meta property="og:type" content="website" />
             <meta property="og:title" content={fullTitle} />
