@@ -113,4 +113,4 @@ it("shows queue and toggles full queue list", async () => {
 
     userEvent.click(trackBtns[2]);
     await waitFor(() => expect(queue.currentTrack).toStrictEqual(tracks[3]));
-}, 7500);
+}, 9500);

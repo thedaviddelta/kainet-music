@@ -36,3 +36,7 @@ yarn-error.log*
 # IDEs
 /.vscode/
 /.idea/
+
+# cypress
+cypress/videos
+cypress/screenshots

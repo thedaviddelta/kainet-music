@@ -10,6 +10,9 @@ module.exports = {
         '<rootDir>/**/tests/*/**/*.{js,jsx,ts,tsx}',
         '<rootDir>/**/*.{spec,test}.{js,jsx,ts,tsx}'
     ],
+    testPathIgnorePatterns: [
+        '<rootDir>/cypress/'
+    ],
     setupFilesAfterEnv: [
         "<rootDir>/tests/setupTests.ts"
     ],
@@ -18,4 +21,4 @@ module.exports = {
         "^@(components|contexts|hooks|mocks|pages|public|reducers|tests|theme)(.*)$": "<rootDir>/$1$2"
     },
     testEnvironment: "jsdom"
-}
+};

@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "renew-mock-data": "ts-node --skip-project mocks/renewData.ts"
   },
   "dependencies": {
@@ -25,6 +27,7 @@
     "ytdl-core": "^4.5.0"
   },
   "devDependencies": {
+    "@testing-library/cypress": "^7.0.6",
     "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^13.1.9",
@@ -35,8 +38,10 @@
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.0.0",
     "babel-eslint": "^10.0.0",
+    "cypress": "^7.5.0",
     "eslint": "^7.5.0",
     "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jest": "^24.0.0",
@@ -51,7 +56,8 @@
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:cypress/recommended"
     ]
   },
   "babel": {

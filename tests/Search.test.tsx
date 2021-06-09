@@ -37,8 +37,8 @@ const tests = {
             expect(queue.currentTrack).toStrictEqual(list[0]);
 
             await waitFor(() => userEvent.click(optionsBtn[1]));
-            const queueBtn = await screen.findByRole("menuitem", { name: /add to queue/i });
-            userEvent.click(queueBtn);
+            const queueBtns = await screen.findAllByRole("menuitem", { name: /add to queue/i });
+            userEvent.click(queueBtns[queueBtns.length - 1]);
             expect(queue.remainingQueue[0]).toStrictEqual(list[1]);
         }
     },
@@ -65,7 +65,7 @@ const tests = {
 
             expect(routerMock.push).toHaveBeenCalledTimes(1);
         },
-        menu: async (list: typeof searchedAlbumsMock | typeof searchedPlaylistsMock) => {
+        menu: async () => {
             const optionsBtn = screen.getAllByRole("button", { name: /more options/i });
 
             await waitFor(() => userEvent.click(optionsBtn[0]));
@@ -130,7 +130,7 @@ describe("albums", () => {
     ));
 
     it("opens album in more options menu", async () => (
-        tests.list.menu(searchedAlbumsMock)
+        tests.list.menu()
     ));
 });
 
@@ -149,7 +149,7 @@ describe("playlists", () => {
     ));
 
     it("opens playlist in more options menu", async () => (
-        tests.list.menu(searchedPlaylistsMock)
+        tests.list.menu()
     ));
 });
 
