@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
 import { FaGithub } from "react-icons/fa";
-import { SearchBar, ColorModeToggler, LocalLink } from ".";
+import { SearchBar, ColorModeToggler, PwaInstallButton, LocalLink } from ".";
 
 type Props = {
     [key: string]: any
@@ -59,36 +59,38 @@ const Header: FC<Props> = (props) => {
                 />
             )}
 
-            {(!isMobile || !isOpen) && (
-                <HStack flex={[0, null, 1]} justify="flex-end">
-                    <ColorModeToggler
-                        variant="outline"
+            <HStack flex={[0, null, 1]} justify="flex-end" display={!isMobile || !isOpen ? "flex" : "none"}>
+                <PwaInstallButton
+                    variant="outline"
+                    colorScheme="kaihui"
+                />
+                <ColorModeToggler
+                    variant="outline"
+                    colorScheme="kaihui"
+                />
+                <IconButton
+                    as={Link}
+                    href="https://github.com/TheDavidDelta/kainet-music"
+                    isExternal={true}
+                    aria-label="GitHub"
+                    icon={<FaGithub/>}
+                    variant="outline"
+                    colorScheme="kaihui"
+                />
+                <Menu strategy="fixed">
+                    <MenuButton
+                        as={Button}
+                        px={1.5}
+                        variant="ghost"
                         colorScheme="kaihui"
-                    />
-                    <IconButton
-                        as={Link}
-                        href="https://github.com/TheDavidDelta/kainet-music"
-                        isExternal={true}
-                        aria-label="GitHub"
-                        icon={<FaGithub/>}
-                        variant="outline"
-                        colorScheme="kaihui"
-                    />
-                    <Menu strategy="fixed">
-                        <MenuButton
-                            as={Button}
-                            px={1.5}
-                            variant="ghost"
-                            colorScheme="kaihui"
-                        >
-                            <Avatar size="sm"/>
-                        </MenuButton>
-                        <MenuList textAlign="center">
-                            Coming soon...
-                        </MenuList>
-                    </Menu>
-                </HStack>
-            )}
+                    >
+                        <Avatar size="sm"/>
+                    </MenuButton>
+                    <MenuList textAlign="center">
+                        Coming soon...
+                    </MenuList>
+                </Menu>
+            </HStack>
         </HStack>
     );
 };
