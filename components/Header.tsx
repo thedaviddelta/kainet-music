@@ -36,7 +36,7 @@ const Header: FC<Props> = (props) => {
             <Box flex={1} display={!isMobile || !isOpen ? null : "none"}>
                 <LocalLink href="/" display="flex" w="fit-content">
                     <NextImage
-                        src="/favicon.svg"
+                        src="/logo.svg"
                         alt="Logo"
                         layout="fixed"
                         width={56}
