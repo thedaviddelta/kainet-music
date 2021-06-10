@@ -62,8 +62,9 @@ const usePlayer = () => {
         signal: AbortSignal,
         retry: number = 0
     ) => {
-        fetch(`/api/source?id=${id}`, {
-            cache: retry > 0 ? "reload" : "default",
+        const url = `/api/source?id=${id}`;
+
+        fetch(url, {
             signal
         }).then(res => {
             if (!res.ok)
@@ -81,7 +82,11 @@ const usePlayer = () => {
 
             await audioRef.current?.play();
             dispatch({ type: ActionType.PLAY });
-        }).catch(err => {
+        }).catch(async err => {
+            if ("caches" in window)
+                await window.caches.open("api-source-url")
+                    .then(cache => cache.delete(url));
+
             if (err.name === "AbortError")
                 return;
             if (retry >= 0 && retry < 3)

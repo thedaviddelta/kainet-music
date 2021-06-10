@@ -1,5 +1,4 @@
 import { FC } from "react";
-import Head from "next/head";
 import { Flex, VStack, Button, Link, useColorModeValue } from "@chakra-ui/react";
 import { Header, Player } from ".";
 
@@ -9,11 +8,6 @@ type Props = {
 
 const Layout: FC<Props> = ({ children, ...props }) => (
     <>
-        <Head>
-            <title>Kainet Music</title>
-            <link rel="icon" href="/favicon.svg" />
-        </Head>
-
         <Button
             as={Link}
             href="#main"

@@ -1,10 +1,13 @@
-import { AppProps } from "next/app";
 import { FC } from "react";
+import { AppProps } from "next/app";
+import dynamic from "next/dynamic";
 import { ChakraProvider, VStack } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
 import theme from "@theme";
 import { QueueProvider } from "@contexts/queue";
-import { Layout, CustomError } from "@components";
+import { CustomError } from "@components";
+
+const Layout = dynamic(() => import("@components/Layout"), { ssr: false });
 
 const App: FC<AppProps> = ({ Component, pageProps }) => (
     <ChakraProvider theme={theme}>

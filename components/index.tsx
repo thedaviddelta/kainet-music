@@ -1,9 +1,11 @@
 export { default as Layout } from "./Layout";
 export { default as CustomError } from "./CustomError";
+export { default as CustomHead } from "./CustomHead";
 export { default as Player } from "./Player";
 export { default as Header } from "./Header";
 export { default as SearchBar } from "./SearchBar";
 export { default as ColorModeToggler } from "./ColorModeToggler";
+export { default as PwaInstallButton } from "./PwaInstallButton";
 export { default as PlayerBar } from "./PlayerBar";
 export { default as LocalLink } from "./LocalLink";
 export { default as SearchItem } from "./SearchItem";

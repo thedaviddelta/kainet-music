@@ -20,6 +20,7 @@
     "framer-motion": "^4",
     "kainet-scraper": "1.2.1",
     "next": "10.2.3",
+    "next-pwa": "^5.2.21",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-error-boundary": "^3.1.3",
