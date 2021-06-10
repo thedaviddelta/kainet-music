@@ -1,6 +1,9 @@
 import { FC } from "react";
+import dynamic from "next/dynamic";
 import { Flex, VStack, Button, Link, useColorModeValue } from "@chakra-ui/react";
-import { Header, Player } from ".";
+
+const Header = dynamic(() => import("@components/Header"), { ssr: false });
+const Player = dynamic(() => import("@components/Player"), { ssr: false });
 
 type Props = {
     [key: string]: any
