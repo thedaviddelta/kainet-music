@@ -6,6 +6,7 @@ import theme from "@theme";
 
 type Props = {
     customTitle?: string,
+    customImg?: string,
     robots?: boolean
 };
 
@@ -15,7 +16,7 @@ const description = "Free and Open Source music streaming service with millions 
 const siteDomain = process.env["NEXT_PUBLIC_SITE_DOMAIN"];
 const url = siteDomain && (siteDomain.includes("localhost") ? "http://" : "https://") + siteDomain;
 
-const CustomHead: FC<Props> = ({ customTitle, robots = true }) => {
+const CustomHead: FC<Props> = ({ customTitle, customImg, robots = true }) => {
     const fullTitle = customTitle
         ? `${customTitle} | ${title}`
         : title;
@@ -45,7 +46,7 @@ const CustomHead: FC<Props> = ({ customTitle, robots = true }) => {
             <meta property="og:url" content={fullUrl} />
             <meta property="og:locale" content="en" />
 
-            <meta property="og:image" content={`${url}/favicon-512x512.png`} />
+            <meta property="og:image" content={customImg || `${url}/favicon-512x512.png`} />
             <meta property="og:image:type" content="image/png" />
             <meta property="og:image:width" content="512" />
             <meta property="og:image:height" content="512" />

@@ -23,7 +23,7 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list })
 
     return (
         <>
-            <CustomHead customTitle={fullCustomTitle} />
+            <CustomHead customTitle={fullCustomTitle} customImg={list.thumbnails[list.thumbnails.length - 1]} />
 
             <VStack
                 w={["95vw", null, "87.5vw"]}
