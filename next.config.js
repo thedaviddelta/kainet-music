@@ -28,6 +28,17 @@ module.exports = withPWA({
                     }
                 }
             },
+            {
+                urlPattern: /^https:\/\/\w+\.googleusercontent\.com\/.*/i,
+                handler: 'StaleWhileRevalidate',
+                options: {
+                    cacheName: 'youtube-assets',
+                    expiration: {
+                        maxEntries: 64,
+                        maxAgeSeconds: 7 * 24 * 60 * 60 // 7 days
+                    }
+                }
+            },
             ...defaultCache
         ]
     },
