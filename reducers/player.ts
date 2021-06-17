@@ -3,8 +3,8 @@ type State = {
     duration: number,
     currentTime: number,
     timeAltered: boolean,
-    sourceUrl: string,
-    volume: number
+    volume: number,
+    refetchCount: number
 };
 
 export const initialState: State = {
@@ -12,8 +12,8 @@ export const initialState: State = {
     duration: 0,
     currentTime: 0,
     timeAltered: false,
-    sourceUrl: "",
-    volume: 100
+    volume: 100,
+    refetchCount: 0
 };
 
 export enum ActionType {
@@ -38,8 +38,7 @@ type Action = {
 } | {
     type: ActionType.SETUP,
     payload: {
-        duration: number,
-        sourceUrl: string
+        duration: number
     }
 } | {
     type: ActionType.STOP
@@ -61,10 +60,10 @@ export default function reducer(state: State, action: Action): State {
         case ActionType.PAUSE:
             return { ...state, playback: "paused" };
         case ActionType.SETUP:
-            const { sourceUrl, duration } = action.payload;
-            return { ...state, sourceUrl, duration, currentTime: 0 };
+            const { duration } = action.payload;
+            return { ...state, duration, currentTime: 0, playback: "playing", refetchCount: 0 };
         case ActionType.STOP:
-            return { ...state, sourceUrl: "", duration: 0, currentTime: 0, playback: "none" };
+            return { ...state, duration: 0, currentTime: 0, playback: "none", refetchCount: 0 };
         case ActionType.TIME_UPDATE:
             const { time, manual } = action.payload;
             return { ...state, currentTime: time, timeAltered: manual || state.timeAltered };

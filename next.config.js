@@ -12,19 +12,8 @@ module.exports = withPWA({
                 options: {
                     cacheName: 'api-source-url',
                     expiration: {
-                        maxEntries: 64,
-                        maxAgeSeconds: 6 * 60 * 60 // 6 hours
-                    }
-                }
-            },
-            {
-                urlPattern: /^https:\/\/(\w|-)+\.googlevideo\.com\/.*/i,
-                handler: 'CacheFirst',
-                options: {
-                    cacheName: 'youtube-source-url',
-                    expiration: {
-                        maxEntries: 64,
-                        maxAgeSeconds: 6 * 60 * 60 // 6 hours
+                        maxEntries: 32,
+                        maxAgeSeconds: 24 * 60 * 60 // 1 day
                     }
                 }
             },
