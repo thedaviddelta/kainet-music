@@ -14,9 +14,12 @@ const Player: FC<Props> = (props) => {
         sourceUrl,
         currentTrack,
         isTrackAlone,
+        setup,
+        onLoadError,
         isPlaybackEmpty,
         isPlaying,
-        togglePlay,
+        play,
+        pause,
         currentTime,
         duration,
         setCurrentTime,
@@ -35,17 +38,24 @@ const Player: FC<Props> = (props) => {
         goTo
     } = usePlayer();
 
+    type AudioEvent = SyntheticEvent<HTMLAudioElement> & { target: HTMLAudioElement };
     const selectedColor = useColorModeValue("kaihong.800", "kaihong.500");
     return (
         <>
             <audio
                 ref={audioRef}
                 src={sourceUrl}
+                onPlay={play}
+                onPause={pause}
                 onEnded={next}
                 loop={isRepeatingOne || (isRepeatingAll && isTrackAlone)}
-                onTimeUpdate={(e: SyntheticEvent<HTMLAudioElement> & { target: HTMLAudioElement }) => (
+                onLoadedMetadata={(e: AudioEvent) => (
+                    setup(e.target.duration)
+                )}
+                onTimeUpdate={(e: AudioEvent) => (
                     setCurrentTime(e.target.currentTime)
                 )}
+                onError={onLoadError}
             />
 
             <PlayerBar
@@ -77,7 +87,7 @@ const Player: FC<Props> = (props) => {
                     <PlaybackButtons
                         isPlaybackEmpty={isPlaybackEmpty}
                         isPlaying={isPlaying}
-                        togglePlay={togglePlay}
+                        togglePlay={isPlaying ? pause : play}
                         canPrev={canPrev}
                         prev={prev}
                         next={next}

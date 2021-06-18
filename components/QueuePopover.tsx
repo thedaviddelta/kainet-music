@@ -46,6 +46,7 @@ const QueuePopover: FC<Props> = ({
         <Popover
             closeOnBlur={false}
             placement={placement}
+            strategy="fixed"
             isOpen={isOpen}
             onOpen={onOpen}
             onClose={onClose}

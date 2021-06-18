@@ -1,6 +1,5 @@
 import { render, screen, waitFor, act } from "./reactUtils";
 import userEvent from "@testing-library/user-event";
-import fetchMock from "jest-fetch-mock";
 import * as audioMock from "@mocks/audio";
 import queueSetup from "@mocks/queue";
 import { localStorageSetMock } from "@mocks/localStorage";
@@ -14,10 +13,6 @@ beforeEach(() => {
     render(<Player bg="kaihui.900" />, { wrapper: QueueWrapper });
     act(() => queue.reset());
     audioMock.resetAllMocks();
-    fetchMock.doMock(async () => JSON.stringify({
-        url: "https://www.learningcontainer.com/wp-content/uploads/2020/02/Sample-OGG-File.ogg",
-        duration: 348
-    }));
 });
 
 it("plays, pauses and skips tracks correctly", async () => {
@@ -31,23 +26,21 @@ it("plays, pauses and skips tracks correctly", async () => {
 
     act(() => queue.setQueue(tracks.slice(0, 2)));
 
-    await waitFor(() => expect(audioMock.play).toHaveBeenCalled());
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(audioMock.pause).toHaveBeenCalled());
     expect(queue.currentTrack).toStrictEqual(tracks[0]);
     expect(prevBtn).toBeDisabled();
     expect(playBtn).not.toBeDisabled();
     expect(nextBtn).not.toBeDisabled();
 
-    expect(playBtn).toHaveAttribute("aria-label", "Pause");
-    userEvent.click(playBtn);
-    await waitFor(() => expect(audioMock.pause).toHaveBeenCalled());
     expect(playBtn).toHaveAttribute("aria-label", "Play");
+    userEvent.click(playBtn);
+    await waitFor(() => expect(audioMock.play).toHaveBeenCalled());
+    expect(playBtn).toHaveAttribute("aria-label", "Pause");
 
     audioMock.resetAllMocks();
     userEvent.click(nextBtn);
 
-    await waitFor(() => expect(audioMock.play).toHaveBeenCalled());
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(audioMock.pause).toHaveBeenCalled());
     expect(queue.currentTrack).toStrictEqual(tracks[1]);
     expect(prevBtn).not.toBeDisabled();
     expect(playBtn).not.toBeDisabled();

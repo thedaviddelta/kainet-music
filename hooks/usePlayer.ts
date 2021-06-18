@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef, useCallback } from "react";
+import { useEffect, useReducer, useRef, useCallback, useMemo } from "react";
 import { useToast } from "@chakra-ui/react";
 import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
@@ -29,14 +29,28 @@ const usePlayer = () => {
     } = useQueue();
 
     const [state, dispatch] = useReducer(reducer, initialState, initLocalStorage);
-    const { playback, duration, currentTime, timeAltered, sourceUrl, volume } = state;
+    const { playback, duration, currentTime, timeAltered, volume, refetchCount } = state;
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const toast = useToast();
 
-    const togglePlay = useCallback(() => (
-        dispatch({ type: playback === "playing" ? ActionType.PAUSE : ActionType.PLAY })
-    ), [playback]);
+    const sourceUrl = useMemo(() => (
+        currentTrack?.id
+            ? `/api/source?id=${currentTrack.id}`
+            : ""
+    ), [currentTrack]);
+
+    const play = useCallback(() => (
+        dispatch({ type: ActionType.PLAY })
+    ), []);
+
+    const pause = useCallback(() => (
+        dispatch({ type: ActionType.PAUSE })
+    ), []);
+
+    const stop = useCallback(() => (
+        dispatch({ type: ActionType.STOP })
+    ), []);
 
     const setCurrentTime = useCallback((time: number, manual = false) => (
         dispatch({ type: ActionType.TIME_UPDATE, payload: { time, manual } })
@@ -45,6 +59,37 @@ const usePlayer = () => {
     const setVolume = useCallback((value: number) => (
         dispatch({ type: ActionType.SET_FIELD, payload: { key: "volume", value } })
     ), []);
+
+    const setup = useCallback((duration: number) => {
+        dispatch({ type: ActionType.SETUP, payload: { duration } });
+        if ("mediaSession" in navigator)
+            navigator.mediaSession?.setPositionState({
+                duration,
+                position: 0
+            });
+    }, []);
+
+    const onLoadError = useCallback(async () => {
+        if (!sourceUrl)
+            return;
+
+        await window.caches.open("api-source-url")
+            .then(cache => cache.delete(sourceUrl));
+
+        if (refetchCount < 3) {
+            dispatch({ type: ActionType.SET_FIELD, payload: { key: "refetchCount", value: refetchCount + 1 } });
+            audioRef.current.load();
+            return;
+        }
+
+        stop();
+        toast({
+            title: "Unexpected error",
+            description: "An error occurred while retrieving the track information",
+            status: "error",
+            duration: 3500
+        });
+    }, [sourceUrl, refetchCount, stop, toast]);
 
     const prev = useCallback(() => {
         if (canPrev && currentTime <= 5)
@@ -57,64 +102,11 @@ const usePlayer = () => {
         setCurrentTime(0, true);
     }, [nextTrack, setCurrentTime]);
 
-    const updateSource = useCallback((
-        id: string,
-        signal: AbortSignal,
-        retry: number = 0
-    ) => {
-        const url = `/api/source?id=${id}`;
-
-        fetch(url, {
-            signal
-        }).then(res => {
-            if (!res.ok)
-                throw new Error(`${res.status} - ${res.statusText}`);
-            return res.json();
-        }).then(async json => {
-            const { url, duration } = json;
-            dispatch({ type: ActionType.SETUP, payload: { sourceUrl: url, duration } });
-
-            if ("mediaSession" in navigator)
-                navigator.mediaSession?.setPositionState({
-                    duration,
-                    position: 0
-                });
-
-            await audioRef.current?.play();
-            dispatch({ type: ActionType.PLAY });
-        }).catch(async err => {
-            if ("caches" in window)
-                await window.caches.open("api-source-url")
-                    .then(cache => cache.delete(url));
-
-            if (err.name === "AbortError")
-                return;
-            if (retry >= 0 && retry < 3)
-                return updateSource(id, signal, retry + 1);
-
-            dispatch({ type: ActionType.STOP });
-            toast({
-                title: "Unexpected error",
-                description: "An error occurred while retrieving the track information",
-                status: "error",
-                duration: 3500
-            });
-        });
-    }, [toast]);
-
-    useEffect(() => {
-        if (!currentTrack)
-            return dispatch({ type: ActionType.STOP });
-
-        dispatch({ type: ActionType.PAUSE });
-        const controller = new AbortController();
-
-        updateSource(currentTrack.id, controller.signal);
-
-        return () => {
-            controller?.abort();
-        };
-    }, [currentTrack, updateSource]);
+    useEffect(() => (
+        sourceUrl
+            ? pause()
+            : stop()
+    ), [sourceUrl, pause, stop]);
 
     useEffect(() => {
         if (!audioRef.current)
@@ -168,22 +160,25 @@ const usePlayer = () => {
         if (!("mediaSession" in navigator) || !navigator.mediaSession)
             return;
 
-        navigator.mediaSession.setActionHandler("play", () => dispatch({ type: ActionType.PLAY }));
-        navigator.mediaSession.setActionHandler("pause", () => dispatch({ type: ActionType.PAUSE }));
-        navigator.mediaSession.setActionHandler("stop", () => dispatch({ type: ActionType.STOP }));
+        navigator.mediaSession.setActionHandler("play", play);
+        navigator.mediaSession.setActionHandler("pause", pause);
+        navigator.mediaSession.setActionHandler("stop", stop);
         navigator.mediaSession.setActionHandler("previoustrack", prev);
         navigator.mediaSession.setActionHandler("nexttrack", next);
         navigator.mediaSession.setActionHandler("seekto", details => setCurrentTime(details.seekTime, true));
-    }, [prev, next, setCurrentTime]);
+    }, [play, pause, stop, prev, next, setCurrentTime]);
 
     return {
         audioRef,
         sourceUrl,
         currentTrack,
         isTrackAlone,
+        setup,
+        onLoadError,
         isPlaybackEmpty: playback === "none",
         isPlaying: playback === "playing",
-        togglePlay,
+        play,
+        pause,
         currentTime,
         duration,
         setCurrentTime,
