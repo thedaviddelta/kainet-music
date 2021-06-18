@@ -23,7 +23,6 @@ const handler: NextApiHandler = async (req, res) => {
         res.hasHeader("Content-Length") || res.setHeader("Content-Length", total);
         res.hasHeader("Content-Range") || res.setHeader("Content-Range", `0-${total}/${total}`);
     });
-    stream.on("error", stream.destroy);
 
     stream.pipe(res);
 };
