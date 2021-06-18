@@ -18,7 +18,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "framer-motion": "^4",
-    "kainet-scraper": "1.2.1",
+    "kainet-scraper": "1.2.2",
     "next": "10.2.3",
     "next-pwa": "^5.2.21",
     "react": "17.0.2",

@@ -5784,10 +5784,10 @@ jsprim@^1.2.2:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-kainet-scraper@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/kainet-scraper/-/kainet-scraper-1.2.1.tgz#6c8ddb8ddb32da408da01e56ce88232d7821d50b"
-  integrity sha512-1rCwsGypGcbBNJufPQCXDtbtWWZefkTnUvG479EAMyuULW5IMcjchVaLWXG4kiSBmXSJA5/XdsKDQgtI29b1ZA==
+kainet-scraper@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/kainet-scraper/-/kainet-scraper-1.2.2.tgz#6b1f4b414bc2aa7e20a48e7c9d2599347a06a95e"
+  integrity sha512-8VXZ3Jz9BX8eIqllSgH0YwZAfmhD7A0zjQJxAauFXb8HmpSGrybrly5sTHgMnh/aIaXk6BfYBIYJJWaT8upxWA==
   dependencies:
     axios "^0.21.1"
     user-agents "^1.0.622"
