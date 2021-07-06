@@ -49,7 +49,7 @@ const CustomError: FC<Props> = (props) => {
                             <CustomHead customTitle={`Couldn't load ${props.errorSubject}`} robots={false} />
 
                             <Heading as="h2" size="2xl">
-                                Couldn't load {props.errorSubject}
+                                Couldn&apos;t load {props.errorSubject}
                             </Heading>
                             <Heading as="p" size="md">
                                 An error occurred while retrieving the {props.errorSubject}

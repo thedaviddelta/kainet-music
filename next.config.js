@@ -31,9 +31,6 @@ module.exports = withPWA({
             ...defaultCache
         ]
     },
-    future: {
-        webpack5: true
-    },
     async headers() {
         return [
             {
