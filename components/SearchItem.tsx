@@ -95,7 +95,7 @@ const SearchItem: FC<Props> = ({
                 subtitlesFontSizes={[["xs", null, "sm"]]}
                 subtitlesLines={[1]}
                 subtitlesSeparators={[
-                    <StarIcon boxSize={2} mb={[2.5, null, 1]} />
+                    <StarIcon key={0} boxSize={2} mb={[2.5, null, 1]} />
                 ]}
                 showTooltip={true}
                 flex={1}

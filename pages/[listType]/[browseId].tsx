@@ -62,8 +62,8 @@ const MusicList: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ list })
                         subtitlesFontSizes={[["md", null, "lg"], ["sm", null, "md"]]}
                         subtitlesLines={[2, 2]}
                         subtitlesSeparators={[
-                            <StarIcon boxSize="0.575rem" mb={[0.5, null, 0]} />,
-                            <StarIcon boxSize={2} mb={[1.5, null, 0.5]} />
+                            <StarIcon key={0} boxSize="0.575rem" mb={[0.5, null, 0]} />,
+                            <StarIcon key={1} boxSize={2} mb={[1.5, null, 0.5]} />
                         ]}
                         pb={[10, null, 14]}
                     />
