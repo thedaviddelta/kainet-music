@@ -46,6 +46,25 @@ You can optionally install *Kainet* as a Progressive Web App on your computer or
 When opening the application in [a browser that supports PWAs](https://caniuse.com/web-app-manifest), an install button should be shown in the top bar.
 
 
+## Custom playlists
+
+Currently, *Kainet* still doesn't support user creation, so you can't create custom music playlists inside the platform.
+
+Despite that, you're able to access any playlist from YouTube or YouTube Music. That way, if you don't mind that much going through Google, you can create your custom playlists on YouTube and use them on *Kainet*.
+
+In order to find the playlist with ease, the best way is using its ID, which can be found in the YouTube URL:
+
+```bash
+https://youtube.com/playlist?list=PLjp0AEEJ0-fGi7bkjrGhBLUF9NMraL9cL
+```
+
+Once you have it, simply search it in the playlists section. In case it's not found, you can directly use the *Kainet*'s playlists URL by adding `VL` to the ID:
+
+```bash
+https://kainet.rocks/playlist/VLPLjp0AEEJ0-fGi7bkjrGhBLUF9NMraL9cL
+```
+
+
 ## Deployment
 
 As *Kainet* is a [NextJS](https://nextjs.org/) project you can deploy your own instance anywhere Next is supported.
