@@ -2,6 +2,7 @@ import { createContext, Dispatch, FC, useContext, useReducer, useEffect } from "
 import { useToast } from "@chakra-ui/react";
 import { YtMusicTrack } from "kainet-scraper";
 import reducer, { Action, ActionType, initialState, RepeatType } from "@reducers/queue";
+import { localGetItem, localSetItem } from "@utils/storage";
 
 const QueueContext = createContext<[
     typeof initialState,
@@ -12,8 +13,8 @@ const QueueContext = createContext<[
 ]);
 
 const initLocalStorage = (state: typeof initialState) => {
-    const initialShuffle = typeof window !== "undefined" && localStorage.getItem("shuffle");
-    const initialRepeat = typeof window !== "undefined" && localStorage.getItem("repeat");
+    const initialShuffle = localGetItem("shuffle");
+    const initialRepeat = localGetItem("repeat");
     return {
         ...state,
         shuffle: initialShuffle
@@ -38,11 +39,11 @@ export const useQueue = () => {
     const toast = useToast();
 
     useEffect(() => {
-        localStorage.setItem("shuffle", shuffle.toString());
+        localSetItem("shuffle", shuffle.toString());
     }, [shuffle]);
 
     useEffect(() => {
-        localStorage.setItem("repeat", repeat.toString());
+        localSetItem("repeat", repeat.toString());
     }, [repeat]);
 
     return {

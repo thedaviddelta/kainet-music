@@ -18,7 +18,7 @@ module.exports = {
     ],
     moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
     moduleNameMapper: {
-        "^@(components|contexts|hooks|mocks|pages|public|reducers|tests|theme)(.*)$": "<rootDir>/$1$2"
+        "^@(components|contexts|hooks|mocks|pages|public|reducers|tests|theme|utils)(.*)$": "<rootDir>/$1$2"
     },
     testEnvironment: "jsdom"
 };

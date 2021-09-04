@@ -2,9 +2,10 @@ import { useEffect, useReducer, useRef, useCallback, useMemo } from "react";
 import { useToast } from "@chakra-ui/react";
 import { useQueue } from "@contexts/queue";
 import reducer, { ActionType, initialState } from "@reducers/player";
+import { localGetItem, localSetItem } from "@utils/storage";
 
 const initLocalStorage = (state: typeof initialState) => {
-    const initialVolume = typeof window !== "undefined" && localStorage.getItem("volume");
+    const initialVolume = localGetItem("volume");
     return {
         ...state,
         volume: initialVolume
@@ -153,7 +154,7 @@ const usePlayer = () => {
     useEffect(() => {
         if (audioRef.current)
             audioRef.current.volume = volume / 100;
-        localStorage.setItem("volume", volume.toString());
+        localSetItem("volume", volume.toString());
     }, [volume]);
 
     useEffect(() => {
