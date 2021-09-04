@@ -83,6 +83,7 @@ These are the currently known *Kainet* instances. Feel free to make a Pull Reque
 | Domain                                           | Hosting                       | SSL Provider                                                                 |
 |:------------------------------------------------:|:-----------------------------:|:----------------------------------------------------------------------------:|
 | [kainet.rocks](https://kainet.rocks/) (Official) | [Vercel](https://vercel.com/) | [Let's Encrypt](https://www.ssllabs.com/ssltest/analyze.html?d=kainet.rocks) |
+| [kainet.alefvanoon.xyz](https://kainet.alefvanoon.xyz/) | [Vercel](https://vercel.com/) | [Let's Encrypt](https://www.ssllabs.com/ssltest/analyze.html?d=kainet.alefvanoon.xyz) |
 
 
 ## Contributors
